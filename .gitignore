@@ -173,9 +173,20 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+# Phase 1 datasets and generated research artifacts
+data/cache/
+data/external/
+data/microbench/
+data/catalogs/*.jsonl
+!data/catalogs/*.example.jsonl
+outputs/
+
 # Cursor  
 #  Cursor is an AI-powered code editor.`.cursorignore` specifies files/directories to 
 #  exclude from AI features like autocomplete and code analysis. Recommended for sensitive data
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+DataDegradationPipeline/HOW_TO_RUN.md
+DataDegradationPipeline/docs/catalog_schema.md
+DataDegradationPipeline/docs/plans/2026-07-24-phase1-syllabus-centered-design.md
