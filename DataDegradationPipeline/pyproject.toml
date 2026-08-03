@@ -7,7 +7,7 @@ name = "microq-phase1"
 version = "0.1.0"
 description = "Syllabus-centered microscopy degradation benchmark for Micro-Q-Instruct"
 readme = "README.md"
-requires-python = ">=3.11,<3.12"
+requires-python = ">=3.9,<3.12"
 license = { file = "LICENSE" }
 authors = [{ name = "DIP Project Team" }]
 dynamic = ["dependencies"]

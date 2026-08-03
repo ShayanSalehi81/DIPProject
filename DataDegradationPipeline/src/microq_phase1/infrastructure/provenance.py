@@ -5,7 +5,7 @@ from __future__ import annotations
 import hashlib
 import platform
 import sys
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from microq_phase1 import __version__
@@ -30,7 +30,8 @@ class RunProvenanceRecorder:
             {
                 "run_id": run_id,
                 "command": command,
-                "started_at_utc": datetime.now(UTC).isoformat(),
+                # datetime.UTC is unavailable before Python 3.11.
+                "started_at_utc": datetime.now(timezone.utc).isoformat(),  # noqa: UP017
                 "microq_phase1_version": __version__,
                 "config_path": str(config_path.resolve()),
                 "config_sha256": hashlib.sha256(payload).hexdigest(),
@@ -39,4 +40,3 @@ class RunProvenanceRecorder:
             },
         )
         return output_path
-

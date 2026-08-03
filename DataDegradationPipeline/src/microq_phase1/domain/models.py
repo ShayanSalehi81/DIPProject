@@ -2,9 +2,19 @@
 
 from __future__ import annotations
 
-from enum import StrEnum
+import sys
 from pathlib import Path
 from typing import Any, Literal
+
+if sys.version_info >= (3, 11):  # noqa: UP036 - package also supports older Python
+    from enum import StrEnum
+else:
+    from enum import Enum
+
+    class StrEnum(str, Enum):
+        """Compatibility implementation of enum.StrEnum for Python < 3.11."""
+
+        __str__ = str.__str__
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
