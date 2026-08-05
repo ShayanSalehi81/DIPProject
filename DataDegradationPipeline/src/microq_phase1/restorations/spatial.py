@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 import numpy as np
+from numpy.typing import NDArray
 from scipy.signal import medfilt2d, wiener
 from skimage.restoration import denoise_wavelet
 
@@ -52,18 +53,37 @@ class WaveletDenoiseRestoration(RestorationStrategy):
         algorithm_parameters: dict[str, Any],
     ) -> ImageFrame:
         del degradation_parameters
-        output = denoise_wavelet(
-            frame.pixels,
-            wavelet=str(algorithm_parameters.get("wavelet", "db2")),
-            mode=str(algorithm_parameters.get("mode", "soft")),
-            method=str(algorithm_parameters.get("method", "BayesShrink")),
-            channel_axis=-1 if frame.pixels.ndim == 3 else None,
-            rescale_sigma=True,
-        )
+        wavelet = str(algorithm_parameters.get("wavelet", "db2"))
+        mode = str(algorithm_parameters.get("mode", "soft"))
+        method = str(algorithm_parameters.get("method", "BayesShrink"))
+
+        def denoise(channel: NDArray[np.float32]) -> NDArray[np.float32]:
+            if float(np.ptp(channel)) == 0.0:
+                return channel.copy()
+            return np.asarray(
+                denoise_wavelet(
+                    channel,
+                    wavelet=wavelet,
+                    mode=mode,
+                    method=method,
+                    channel_axis=None,
+                    rescale_sigma=True,
+                ),
+                dtype=np.float32,
+            )
+
+        output = _per_channel(frame.pixels, denoise)
+        output = np.where(np.isfinite(output), output, frame.pixels)
         return ImageFrame(np.clip(output, 0.0, 1.0).astype(np.float32), frame.record)
 
 
-def _per_channel(pixels: np.ndarray, operation: Any) -> np.ndarray:
+def _per_channel(
+    pixels: NDArray[np.float32],
+    operation: Any,
+) -> NDArray[np.float32]:
     if pixels.ndim == 2:
-        return np.asarray(operation(pixels))
-    return np.stack([operation(pixels[..., index]) for index in range(3)], axis=-1)
+        return np.asarray(operation(pixels), dtype=np.float32)
+    return np.asarray(
+        np.stack([operation(pixels[..., index]) for index in range(3)], axis=-1),
+        dtype=np.float32,
+    )

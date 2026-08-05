@@ -38,8 +38,8 @@ class WaveletFeatureExtractor(FeatureExtractorStrategy):
         detail_total = sum(detail_energies)
         total = approximation_energy + detail_total + np.finfo(np.float64).eps
         return {
-            "wavelet_detail_energy_ratio": detail_total / total,
-            "wavelet_diagonal_fraction": diagonal_energy
-            / (detail_total + np.finfo(np.float64).eps),
+            "wavelet_detail_energy_ratio": float(detail_total / total),
+            "wavelet_diagonal_fraction": float(
+                diagonal_energy / (detail_total + np.finfo(np.float64).eps)
+            ),
         }
-

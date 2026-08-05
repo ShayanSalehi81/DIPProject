@@ -179,8 +179,17 @@ data/external/
 data/microbench/
 data/catalogs/*.jsonl
 !data/catalogs/*.example.jsonl
-outputs/
 
+# The Phase 1 project currently lives below the repository root.
+DataDegradationPipeline/data/cache/
+DataDegradationPipeline/data/external/
+DataDegradationPipeline/data/microbench/
+DataDegradationPipeline/data/catalogs/*.jsonl
+!DataDegradationPipeline/data/catalogs/*.example.jsonl
+DataDegradationPipeline/outputs/pilot/
+DataDegradationPipeline/outputs/generated/
+DataDegradationPipeline/outputs/manifests/
+DataDegradationPipeline/outputs/restored/
 # Cursor  
 #  Cursor is an AI-powered code editor.`.cursorignore` specifies files/directories to 
 #  exclude from AI features like autocomplete and code analysis. Recommended for sensitive data

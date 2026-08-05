@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import logging
 import logging.handlers
+from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
 from time import perf_counter
-from typing import Any, Iterator
+from typing import Any, cast
 from uuid import uuid4
 
 import structlog
@@ -82,7 +83,7 @@ def configure_logging(
 
 def get_logger(name: str) -> structlog.stdlib.BoundLogger:
     """Return a structured logger using the process-wide configuration."""
-    return structlog.get_logger(name)
+    return cast(structlog.stdlib.BoundLogger, structlog.get_logger(name))
 
 
 @contextmanager
@@ -101,4 +102,3 @@ def logged_stage(
         bound.exception("stage_failed", duration_seconds=perf_counter() - started)
         raise
     bound.info("stage_completed", duration_seconds=perf_counter() - started)
-

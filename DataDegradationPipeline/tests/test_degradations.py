@@ -6,6 +6,7 @@ import pytest
 from microq_phase1.degradations.compression import JpegCompression
 from microq_phase1.degradations.convolution import DefocusBlur, MotionBlur
 from microq_phase1.degradations.frequency import PeriodicInterference
+from microq_phase1.degradations.kernels import motion_psf
 from microq_phase1.degradations.microscopy import (
     ChromaticMisregistration,
     Photobleaching,
@@ -61,8 +62,15 @@ def test_noise_is_deterministic_for_same_seed(color_frame: ImageFrame) -> None:
     np.testing.assert_array_equal(first.pixels, second.pixels)
 
 
+def test_two_pixel_motion_psf_is_not_identity() -> None:
+    kernel = motion_psf(2, 15.0)
+
+    assert np.count_nonzero(kernel) == 3
+    assert float(kernel[1, 1]) == pytest.approx(0.5)
+    assert float(kernel.sum()) == pytest.approx(1.0)
+
+
 def test_photobleaching_rejects_non_fluorescence(color_frame: ImageFrame) -> None:
     light_record = color_frame.record.model_copy(update={"modality": "light"})
     light_frame = ImageFrame(color_frame.pixels.copy(), light_record)
     assert not Photobleaching().supports(light_frame)
-

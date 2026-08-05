@@ -43,7 +43,7 @@ class PolygonMaskExporter:
         return output_path.resolve()
 
     def _rings(self, value: object) -> Iterator[list[tuple[float, float]]]:
-        if not isinstance(value, Sequence) or isinstance(value, (str, bytes)):
+        if not isinstance(value, Sequence) or isinstance(value, str | bytes):
             return
         items = list(value)
         if self._is_flat_ring(items):
@@ -70,7 +70,7 @@ class PolygonMaskExporter:
     def _is_point_ring(items: list[Any]) -> bool:
         return len(items) >= 3 and all(
             isinstance(point, Sequence)
-            and not isinstance(point, (str, bytes))
+            and not isinstance(point, str | bytes)
             and len(point) == 2
             and all(isinstance(value, Real) for value in point)
             for point in items

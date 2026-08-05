@@ -16,7 +16,7 @@ class JpegCompression(DegradationStrategy):
     kind = DegradationKind.JPEG
 
     def supports(self, frame: ImageFrame) -> bool:
-        return min(frame.pixels.shape[:2]) >= 8
+        return bool(min(frame.pixels.shape[:2]) >= 8)
 
     def apply(
         self,

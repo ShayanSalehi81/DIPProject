@@ -1,0 +1,192 @@
+{
+  "degradation": {
+    "accuracy": 0.3488600951287518,
+    "confusion_matrix": [
+      [
+        0,
+        0,
+        0,
+        0,
+        54,
+        1,
+        9,
+        115,
+        0,
+        24
+      ],
+      [
+        0,
+        70,
+        65,
+        77,
+        216,
+        8,
+        3,
+        45,
+        40,
+        76
+      ],
+      [
+        0,
+        12,
+        192,
+        42,
+        137,
+        24,
+        196,
+        79,
+        13,
+        38
+      ],
+      [
+        0,
+        13,
+        105,
+        68,
+        222,
+        0,
+        94,
+        166,
+        7,
+        62
+      ],
+      [
+        0,
+        0,
+        66,
+        40,
+        326,
+        1,
+        246,
+        14,
+        5,
+        29
+      ],
+      [
+        0,
+        0,
+        3,
+        5,
+        76,
+        29,
+        24,
+        43,
+        2,
+        16
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        43,
+        0,
+        663,
+        24,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        36,
+        12,
+        59,
+        11,
+        195,
+        373,
+        1,
+        42
+      ],
+      [
+        0,
+        40,
+        90,
+        66,
+        246,
+        20,
+        42,
+        94,
+        71,
+        49
+      ],
+      [
+        0,
+        0,
+        11,
+        19,
+        44,
+        1,
+        105,
+        206,
+        1,
+        335
+      ]
+    ],
+    "labels": [
+      "chromatic_misregistration",
+      "defocus",
+      "jpeg",
+      "motion",
+      "periodic",
+      "photobleaching",
+      "poisson_gaussian",
+      "quantization",
+      "sampling",
+      "saturation"
+    ],
+    "macro_f1": 0.27307985572914933,
+    "model_path": "/home/dev/shayan_workspace/DIPProject/DataDegradationPipeline/outputs/baseline/degradation_classifier.joblib"
+  },
+  "evaluation_samples": 6097,
+  "feature_names": [
+    "black_clip_fraction",
+    "chromatic_max_shift",
+    "chromatic_mean_shift",
+    "dynamic_range_p99_p01",
+    "entropy",
+    "fourier_high_frequency_ratio",
+    "fourier_mid_frequency_ratio",
+    "fourier_spectral_centroid",
+    "gradient_energy",
+    "gradient_mean",
+    "intensity_mean",
+    "intensity_std",
+    "jpeg_blockiness",
+    "laplacian_variance",
+    "periodic_peak_to_median",
+    "rms_contrast",
+    "wavelet_detail_energy_ratio",
+    "wavelet_diagonal_fraction",
+    "white_clip_fraction"
+  ],
+  "policy": "fit=external_training; evaluate=official_benchmark",
+  "severity": {
+    "accuracy": 0.41036575364933575,
+    "confusion_matrix": [
+      [
+        307,
+        573,
+        1157
+      ],
+      [
+        230,
+        868,
+        945
+      ],
+      [
+        256,
+        434,
+        1327
+      ]
+    ],
+    "labels": [
+      "medium",
+      "strong",
+      "weak"
+    ],
+    "macro_f1": 0.38245816234282576,
+    "model_path": "/home/dev/shayan_workspace/DIPProject/DataDegradationPipeline/outputs/baseline/severity_classifier.joblib"
+  },
+  "training_samples": 6529
+}

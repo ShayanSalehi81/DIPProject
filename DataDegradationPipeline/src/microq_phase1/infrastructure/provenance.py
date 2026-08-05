@@ -31,7 +31,7 @@ class RunProvenanceRecorder:
                 "run_id": run_id,
                 "command": command,
                 # datetime.UTC is unavailable before Python 3.11.
-                "started_at_utc": datetime.now(timezone.utc).isoformat(),  # noqa: UP017
+                "started_at_utc": datetime.now(timezone.utc).isoformat(),
                 "microq_phase1_version": __version__,
                 "config_path": str(config_path.resolve()),
                 "config_sha256": hashlib.sha256(payload).hexdigest(),

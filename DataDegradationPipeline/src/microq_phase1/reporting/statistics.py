@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+from numpy.typing import NDArray
 
 from microq_phase1.core.config import ProjectConfig
 from microq_phase1.core.randomness import derive_seed
@@ -83,7 +84,7 @@ def restoration_delta_summary(
 
 
 def _bootstrap_mean_ci(
-    values: np.ndarray,
+    values: NDArray[np.float64],
     resamples: int,
     confidence: float,
     seed: int,

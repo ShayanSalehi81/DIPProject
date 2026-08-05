@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 from typing import Any, Literal
 
-if sys.version_info >= (3, 11):  # noqa: UP036 - package also supports older Python
+if sys.version_info >= (3, 11):
     from enum import StrEnum
 else:
     from enum import Enum
@@ -79,7 +79,9 @@ class ImageRecord(BaseModel):
     def normalize_path(cls, value: object) -> object:
         if value is None:
             return None
-        return Path(str(value))
+        # Leave construction of the platform-specific Path subclass to Pydantic.
+        # Returning a Path here breaks model_validate_json() under Pydantic 2.10.
+        return str(value)
 
 
 class DegradationStep(BaseModel):

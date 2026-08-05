@@ -10,6 +10,10 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 from microq_phase1.domain.models import DegradationKind, Modality, PoolRole, Severity
 
 
+def _all_modalities() -> set[Modality]:
+    return set(Modality)
+
+
 class LoggingConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -40,9 +44,10 @@ class MicroBenchExportConfig(BaseModel):
     catalog_path: Path = Path("data/catalogs/microbench_evaluation.jsonl")
     cache_dir: Path = Path("data/cache/huggingface")
     max_records: int | None = Field(default=None, gt=0)
+    included_licenses: set[str] | None = None
 
     @model_validator(mode="after")
-    def require_pinned_revision(self) -> "MicroBenchExportConfig":
+    def require_pinned_revision(self) -> MicroBenchExportConfig:
         forbidden = {"main", "master", "latest", "REPLACE_WITH_PINNED_COMMIT_SHA"}
         if self.enabled and self.revision in forbidden:
             raise ValueError("Micro-Bench revision must be an immutable commit SHA.")
@@ -54,12 +59,12 @@ class DegradationConfig(BaseModel):
 
     kind: DegradationKind
     enabled: bool = True
-    applicable_modalities: set[Modality] = Field(default_factory=lambda: set(Modality))
+    applicable_modalities: set[Modality] = Field(default_factory=_all_modalities)
     requires_multichannel: bool = False
     severity_parameters: dict[Severity, dict[str, Any]]
 
     @model_validator(mode="after")
-    def require_all_severities(self) -> "DegradationConfig":
+    def require_all_severities(self) -> DegradationConfig:
         required = {Severity.WEAK, Severity.MEDIUM, Severity.STRONG}
         if self.enabled and set(self.severity_parameters) != required:
             raise ValueError(f"{self.kind} must define weak, medium, and strong parameters.")
@@ -159,7 +164,7 @@ class ProjectConfig(BaseModel):
     reporting: ReportingConfig = Field(default_factory=ReportingConfig)
 
     @model_validator(mode="after")
-    def require_unique_entities(self) -> "ProjectConfig":
+    def require_unique_entities(self) -> ProjectConfig:
         pool_names = [pool.name for pool in self.pools]
         kinds = [item.kind for item in self.degradations]
         if len(pool_names) != len(set(pool_names)):

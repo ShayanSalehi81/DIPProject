@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
-from typing import Protocol
+from typing import ClassVar, Protocol
 
 from microq_phase1.core.errors import PoolPolicyError
 from microq_phase1.domain.models import ImageRecord, PoolRole
@@ -18,7 +18,10 @@ class PoolDescriptor(Protocol):
 class StrictTwoPoolPolicy:
     """Prevent official benchmark data from influencing train/development artifacts."""
 
-    forbidden_benchmark_roles = {PoolRole.TRAINING, PoolRole.DEVELOPMENT}
+    forbidden_benchmark_roles: ClassVar[set[PoolRole]] = {
+        PoolRole.TRAINING,
+        PoolRole.DEVELOPMENT,
+    }
 
     def validate_pool_configs(self, pools: Iterable[PoolDescriptor]) -> None:
         configured = list(pools)

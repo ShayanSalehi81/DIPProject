@@ -22,9 +22,10 @@ These artifacts will later provide images and evidence-grounded targets for VLM 
 tuning. The VLM is a downstream consumer rather than a substitute for Phase 1's image-processing
 contribution.
 
-> Implementation status: the complete code, configuration, tests, and documentation have been
-> written. In accordance with the project instruction, no dependency installation, download,
-> dataset generation, or test execution was performed in the authoring workspace.
+> Verification status (2026-08-04): the strict 12,917-image pool audit and a 300-source,
+> 2,723-recipe pilot completed successfully. The pilot validation passed with no errors and 99.85%
+> PSNR severity monotonicity; the network-free test, lint, and strict typing checks also pass. The
+> full Step 7 run remains intentionally unstarted.
 
 ## Scientific motivation
 
@@ -362,7 +363,8 @@ modality/license distributions, degradation counts, intended use, and limitation
   labeled as such in the report.
 - Wiener deconvolution uses the recorded synthetic PSF. A later blind-PSF ablation would be a
   harder and more realistic extension.
-- The provided severity parameters require pilot calibration before being treated as experimental
+- The provided severity parameters were calibrated on the documented 300-source pilot and require
+  recalibration before being transferred to materially different acquisition distributions.
   constants.
 - No performance or correctness result is claimed until the implementation is executed and
   validated on the target server.

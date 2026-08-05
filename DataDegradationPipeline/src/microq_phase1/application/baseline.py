@@ -7,6 +7,7 @@ from typing import Any
 
 import joblib
 import numpy as np
+from numpy.typing import NDArray
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix, f1_score
 from sklearn.pipeline import Pipeline
@@ -73,9 +74,9 @@ class FingerprintBaselineService:
 
     @staticmethod
     def _fit_task(
-        x_train: np.ndarray,
+        x_train: NDArray[np.float64],
         y_train: list[str],
-        x_eval: np.ndarray,
+        x_eval: NDArray[np.float64],
         y_eval: list[str],
         model_path: Path,
     ) -> dict[str, Any]:
@@ -105,7 +106,9 @@ class FingerprintBaselineService:
         }
 
     @staticmethod
-    def _matrix(records: list[AnalysisRecord], feature_names: list[str]) -> np.ndarray:
+    def _matrix(
+        records: list[AnalysisRecord], feature_names: list[str]
+    ) -> NDArray[np.float64]:
         return np.asarray(
             [[record.features[name] for name in feature_names] for record in records],
             dtype=np.float64,

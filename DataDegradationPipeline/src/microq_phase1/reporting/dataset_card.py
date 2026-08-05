@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 from collections import Counter
 from pathlib import Path
+from typing import Any
 
 from microq_phase1.core.config import ProjectConfig
 from microq_phase1.domain.models import RecipeRecord
@@ -45,10 +46,10 @@ class DatasetCardBuilder:
         config: ProjectConfig,
         recipe_count: int,
         source_count: int,
-        roles: Counter[object],
-        modalities: Counter[object],
-        licenses: Counter[object],
-        degradations: Counter[object],
+        roles: Counter[Any],
+        modalities: Counter[Any],
+        licenses: Counter[Any],
+        degradations: Counter[Any],
     ) -> str:
         return f"""# Micro-Q-Instruct Phase 1 Dataset Card
 
@@ -85,8 +86,8 @@ training.
 
 Degradations are controlled approximations. Photobleaching is represented as retained signal,
 defocus uses a disk PSF, periodic restoration uses the known synthetic frequency, and reference
-morphology is available only for catalog records with aligned masks. Severity parameters require
-documented pilot calibration.
+morphology is available only for catalog records with aligned masks. Severity parameters are
+empirical and require recalibration when the source or acquisition distribution changes.
 
 ## Licensing
 
@@ -100,6 +101,6 @@ validation report, structured logs, and run-provenance JSON.
 """
 
 
-def _serializable_counts(values: Counter[object]) -> dict[str, int]:
+def _serializable_counts(values: Counter[Any]) -> dict[str, int]:
     ordered = sorted(values.items(), key=lambda item: str(item[0]))
     return {str(key): count for key, count in ordered}

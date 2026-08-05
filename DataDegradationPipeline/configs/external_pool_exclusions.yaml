@@ -1,0 +1,14 @@
+# Records excluded after the strict cross-pool perceptual-hash review.
+# Keep this file with the experiment configuration so rebuilding the combined
+# external catalog cannot silently reintroduce reviewed collisions.
+exclusions:
+  - image_id: bbbc038-e1bcb583985325d0ef5f3ef52957d0371c96d4af767b13e48102bca9d5351a9b
+    source_dataset: BBBC038-v1
+    matched_evaluation_image_id: 8666d2af-4e9c-41d8-a408-fdb12ab5cc52
+    hamming_distance: 4
+    disposition: excluded_from_external_pool
+  - image_id: bbbc038-f4c4db3df4ff0de90f44b027fc2e28c16bf7e5c75ea75b0a9762bbb7ac86e7a3
+    source_dataset: BBBC038-v1
+    matched_evaluation_image_id: df0319f3-2834-4de7-9188-c1d0a2580bf3
+    hamming_distance: 2
+    disposition: excluded_from_external_pool

@@ -6,6 +6,7 @@ import json
 from collections.abc import Iterator
 from uuid import NAMESPACE_URL, uuid5
 
+from microq_phase1.application.recipe_selection import RecipeCandidateSelector
 from microq_phase1.core.config import DegradationConfig, PoolConfig, ProjectConfig
 from microq_phase1.core.logging import get_logger
 from microq_phase1.core.randomness import derive_seed
@@ -16,7 +17,6 @@ from microq_phase1.domain.models import (
     Severity,
 )
 from microq_phase1.domain.policy import StrictTwoPoolPolicy
-from microq_phase1.application.recipe_selection import RecipeCandidateSelector
 from microq_phase1.infrastructure.catalogs import JsonlImageCatalog
 from microq_phase1.infrastructure.hashing import ImageHasher
 from microq_phase1.infrastructure.jsonl import write_jsonl_atomic

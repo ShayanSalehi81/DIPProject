@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import numpy as np
+from numpy.typing import NDArray
 
 from microq_phase1.domain.strategies import FeatureExtractorStrategy, ImageFrame
 from microq_phase1.infrastructure.images import grayscale
@@ -26,14 +27,13 @@ class FrequencyFeatureExtractor(FeatureExtractorStrategy):
             "fourier_high_frequency_ratio": high_frequency,
             "fourier_mid_frequency_ratio": mid_frequency,
             "fourier_spectral_centroid": float(np.sum(radius * power) / total),
-            "periodic_peak_to_median": peak / median,
+            "periodic_peak_to_median": float(peak / median),
         }
 
 
-def _normalized_radius(shape: tuple[int, int]) -> np.ndarray:
+def _normalized_radius(shape: tuple[int, int]) -> NDArray[np.float64]:
     height, width = shape
     yy, xx = np.mgrid[0:height, 0:width]
     cy, cx = (height - 1) / 2.0, (width - 1) / 2.0
     denominator = np.hypot(max(cy, 1.0), max(cx, 1.0))
-    return np.hypot(yy - cy, xx - cx) / denominator
-
+    return np.asarray(np.hypot(yy - cy, xx - cx) / denominator, dtype=np.float64)

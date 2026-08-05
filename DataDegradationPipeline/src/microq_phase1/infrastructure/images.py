@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
+from typing import cast
 
 import cv2
 import numpy as np
+from numpy.typing import NDArray
 from PIL import Image, ImageOps
 
 from microq_phase1.domain.models import ImageRecord
@@ -20,7 +22,7 @@ class PillowImageRepository:
         if record.bit_depth == 16:
             return self._load_sixteen_bit(record)
         with Image.open(record.image_path) as opened:
-            image = ImageOps.exif_transpose(opened)
+            image = cast(Image.Image, ImageOps.exif_transpose(opened))
             if image.mode.startswith("I;16"):
                 raise ValueError(
                     f"Catalog declares 8-bit but image is 16-bit: {record.image_path}"
@@ -43,7 +45,7 @@ class PillowImageRepository:
         Image.fromarray(pixels, mode=mode).save(temporary, format=file_format)
         os.replace(temporary, path)
 
-    def load_mask(self, path: Path) -> np.ndarray:
+    def load_mask(self, path: Path) -> NDArray[np.bool_]:
         with Image.open(path) as opened:
             return np.asarray(opened.convert("L"), dtype=np.uint8) > 0
 

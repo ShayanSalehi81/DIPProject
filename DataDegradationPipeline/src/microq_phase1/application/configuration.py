@@ -51,6 +51,15 @@ class ExperimentConfigurationValidator:
             raise ConfigurationError(
                 "Official pool catalog must match microbench_export.catalog_path."
             )
+        included = config.microbench_export.included_licenses
+        if included is None:
+            return
+        unreviewed = included - config.validation.license_allowlist
+        if unreviewed:
+            raise ConfigurationError(
+                "Micro-Bench export includes licenses absent from the reviewed allowlist: "
+                f"{', '.join(sorted(unreviewed))}"
+            )
 
     def _validate_restorations(self, config: ProjectConfig) -> None:
         rules = config.restoration.rules
@@ -64,9 +73,7 @@ class ExperimentConfigurationValidator:
         enabled = {item.kind for item in config.degradations if item.enabled}
         missing = enabled - set(rule_kinds)
         if missing:
-            raise ConfigurationError(
-                f"Missing restoration rules for: {', '.join(sorted(missing))}"
-            )
+            raise ConfigurationError(f"Missing restoration rules for: {', '.join(sorted(missing))}")
 
     @staticmethod
     def _validate_degradation(config: DegradationConfig) -> None:

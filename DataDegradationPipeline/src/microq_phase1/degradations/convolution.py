@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 import numpy as np
+from numpy.typing import NDArray
 from scipy.ndimage import convolve
 
 from microq_phase1.degradations.kernels import disk_psf, motion_psf
@@ -12,11 +13,13 @@ from microq_phase1.domain.models import DegradationKind
 from microq_phase1.domain.strategies import DegradationStrategy, ImageFrame
 
 
-def convolve_channels(pixels: np.ndarray, kernel: np.ndarray) -> np.ndarray:
+def convolve_channels(
+    pixels: NDArray[np.float32], kernel: NDArray[np.float32]
+) -> NDArray[np.float32]:
     if pixels.ndim == 2:
-        return convolve(pixels, kernel, mode="reflect")
+        return np.asarray(convolve(pixels, kernel, mode="reflect"), dtype=np.float32)
     channels = [convolve(pixels[..., index], kernel, mode="reflect") for index in range(3)]
-    return np.stack(channels, axis=-1)
+    return np.asarray(np.stack(channels, axis=-1), dtype=np.float32)
 
 
 class DefocusBlur(DegradationStrategy):

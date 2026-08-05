@@ -15,7 +15,7 @@ class SamplingDegradation(DegradationStrategy):
     kind = DegradationKind.SAMPLING
 
     def supports(self, frame: ImageFrame) -> bool:
-        return min(frame.pixels.shape[:2]) >= 16
+        return bool(min(frame.pixels.shape[:2]) >= 16)
 
     def apply(
         self,
@@ -28,7 +28,10 @@ class SamplingDegradation(DegradationStrategy):
         if factor <= 1:
             raise ValueError("Sampling factor must be greater than one.")
         height, width = frame.pixels.shape[:2]
-        target = (max(1, round(height / factor)), max(1, round(width / factor)))
+        target: tuple[int, ...] = (
+            max(1, round(height / factor)),
+            max(1, round(width / factor)),
+        )
         if frame.pixels.ndim == 3:
             target = (*target, frame.pixels.shape[2])
         reduced = resize(

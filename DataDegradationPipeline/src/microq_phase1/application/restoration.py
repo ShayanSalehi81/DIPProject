@@ -6,6 +6,7 @@ import shutil
 from collections.abc import Iterator
 
 from microq_phase1.core.config import ProjectConfig, RestorationRuleConfig
+from microq_phase1.core.errors import RestorationError
 from microq_phase1.core.logging import get_logger
 from microq_phase1.domain.models import DegradationKind, RecipeRecord, RestorationStep
 from microq_phase1.infrastructure.hashing import ImageHasher
@@ -81,7 +82,17 @@ class RestorationService:
                     )
                     continue
                 strategy = self._registry.get(rule.algorithm)
-                frame = strategy.restore(frame, degradation.parameters, rule.parameters)
+                try:
+                    frame = strategy.restore(
+                        frame,
+                        degradation.parameters,
+                        rule.parameters,
+                    )
+                except Exception as exc:
+                    raise RestorationError(
+                        f"Failed {rule.algorithm} for recipe {recipe.recipe_id} "
+                        f"(source {recipe.source.image_id})."
+                    ) from exc
                 steps.append(
                     RestorationStep(
                         degradation=degradation.kind,

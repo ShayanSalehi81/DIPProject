@@ -1,0 +1,10 @@
+{
+  "command": "export-microbench",
+  "config_path": "/home/dev/shayan_workspace/DIPProject/DataDegradationPipeline/configs/phase1.yaml",
+  "config_sha256": "f158e78c3af0e3792f4d6b0bfbc725fb1054123d7b5be105439b3372f31878f1",
+  "microq_phase1_version": "0.1.0",
+  "platform": "Linux-5.15.0-153-generic-x86_64-with-glibc2.35",
+  "python_version": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+  "run_id": "8c5f0664671f4b7d813063dc6d599ce9",
+  "started_at_utc": "2026-08-04T17:42:47.144049+00:00"
+}

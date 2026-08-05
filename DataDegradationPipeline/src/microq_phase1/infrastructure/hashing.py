@@ -5,10 +5,10 @@ from __future__ import annotations
 import hashlib
 from dataclasses import dataclass
 from pathlib import Path
+from typing import cast
 
-import imagehash
 import cv2
-import numpy as np
+import imagehash
 from PIL import Image, ImageOps
 
 
@@ -32,7 +32,7 @@ class ImageHasher:
         elif decoded.ndim == 3 and decoded.shape[2] == 3:
             decoded = cv2.cvtColor(decoded, cv2.COLOR_BGR2RGB)
         with Image.open(path) as opened:
-            image = ImageOps.exif_transpose(opened)
+            image = cast(Image.Image, ImageOps.exif_transpose(opened))
             pixel_hash = hashlib.sha256()
             pixel_hash.update(str(decoded.shape).encode("ascii"))
             pixel_hash.update(str(decoded.dtype).encode("ascii"))

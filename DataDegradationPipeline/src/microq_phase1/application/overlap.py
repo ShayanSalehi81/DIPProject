@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections import defaultdict
 
 import numpy as np
+from numpy.typing import NDArray
 from sklearn.neighbors import NearestNeighbors
 
 from microq_phase1.core.config import PoolConfig
@@ -90,7 +91,6 @@ class CrossPoolOverlapDetector:
         return evaluation, non_evaluation
 
 
-def _hash_bits(value: str) -> np.ndarray:
+def _hash_bits(value: str) -> NDArray[np.uint8]:
     integer = int(value, 16)
     return np.asarray([(integer >> offset) & 1 for offset in range(64)], dtype=np.uint8)
-

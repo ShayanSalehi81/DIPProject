@@ -14,7 +14,7 @@ class PeriodicInterference(DegradationStrategy):
     kind = DegradationKind.PERIODIC
 
     def supports(self, frame: ImageFrame) -> bool:
-        return min(frame.pixels.shape[:2]) >= 16
+        return bool(min(frame.pixels.shape[:2]) >= 16)
 
     def apply(
         self,

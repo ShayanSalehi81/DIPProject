@@ -1,0 +1,10 @@
+{
+  "command": "run-all",
+  "config_path": "/home/dev/shayan_workspace/DIPProject/DataDegradationPipeline/configs/phase1.yaml",
+  "config_sha256": "4d5fc10647cecc81a4e9ac876aaf3a11778f3aedb3fd8c923b699e61450134f8",
+  "microq_phase1_version": "0.1.0",
+  "platform": "Linux-5.15.0-153-generic-x86_64-with-glibc2.35",
+  "python_version": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+  "run_id": "235bec28889b4efc90ab6237a053432c",
+  "started_at_utc": "2026-08-04T20:16:20.377510+00:00"
+}

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import numpy as np
+from numpy.typing import NDArray
 from scipy.spatial.distance import jensenshannon
 from skimage.filters import sobel
 from skimage.metrics import peak_signal_noise_ratio, structural_similarity
@@ -41,8 +42,9 @@ class QualityMetricCalculator:
                     win_size=window,
                 )
             ),
-            "edge_retention_ratio": candidate_edge
-            / (clean_edge + np.finfo(np.float32).eps),
+            "edge_retention_ratio": float(
+                candidate_edge / (clean_edge + np.finfo(np.float32).eps)
+            ),
             "histogram_js_divergence": self._histogram_divergence(
                 clean_gray,
                 candidate_gray,
@@ -50,7 +52,9 @@ class QualityMetricCalculator:
         }
 
     @staticmethod
-    def _histogram_divergence(clean: np.ndarray, candidate: np.ndarray) -> float:
+    def _histogram_divergence(
+        clean: NDArray[np.float32], candidate: NDArray[np.float32]
+    ) -> float:
         clean_hist, _ = np.histogram(clean, bins=256, range=(0.0, 1.0), density=False)
         candidate_hist, _ = np.histogram(candidate, bins=256, range=(0.0, 1.0), density=False)
         clean_probability = (clean_hist + 1e-12) / (clean_hist.sum() + 256e-12)

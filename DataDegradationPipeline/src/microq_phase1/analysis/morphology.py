@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import numpy as np
+from numpy.typing import NDArray
 from scipy.ndimage import label
 from skimage.filters import threshold_otsu
 from skimage.morphology import binary_closing, binary_opening, disk
@@ -14,7 +15,9 @@ from microq_phase1.infrastructure.images import grayscale
 class MorphologyMetricCalculator:
     """Measure whether degradation preserves mask-scale biological structure."""
 
-    def calculate(self, frame: ImageFrame, reference_mask: np.ndarray) -> dict[str, float]:
+    def calculate(
+        self, frame: ImageFrame, reference_mask: NDArray[np.bool_]
+    ) -> dict[str, float]:
         gray = grayscale(frame.pixels)
         if gray.shape != reference_mask.shape:
             raise ValueError(
@@ -37,6 +40,6 @@ class MorphologyMetricCalculator:
         }
 
     @staticmethod
-    def _dice(left: np.ndarray, right: np.ndarray) -> float:
+    def _dice(left: NDArray[np.bool_], right: NDArray[np.bool_]) -> float:
         intersection = int(np.logical_and(left, right).sum())
         return (2.0 * intersection) / max(int(left.sum()) + int(right.sum()), 1)

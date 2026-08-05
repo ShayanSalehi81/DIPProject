@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from collections import Counter
 
+from microq_phase1.application.overlap import CrossPoolOverlapDetector
 from microq_phase1.core.config import PoolConfig, ProjectConfig
 from microq_phase1.core.errors import PoolPolicyError
 from microq_phase1.core.logging import get_logger
-from microq_phase1.application.overlap import CrossPoolOverlapDetector
 from microq_phase1.domain.models import ImageRecord
 from microq_phase1.domain.policy import StrictTwoPoolPolicy
 from microq_phase1.infrastructure.catalogs import JsonlImageCatalog
@@ -49,7 +49,7 @@ class PoolAuditService:
             or license_violations
             or (near and config.validation.fail_on_near_duplicate)
         )
-        report = {
+        report: dict[str, object] = {
             "status": "failed" if failed else "passed",
             "policy": "strict_two_pool",
             "pool_summary": self._summarize(records),

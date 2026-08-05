@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 import numpy as np
+from numpy.typing import NDArray
 from skimage.restoration import wiener
 
 from microq_phase1.degradations.kernels import disk_psf, motion_psf
@@ -36,7 +37,7 @@ class WienerDeconvolution(RestorationStrategy):
         return ImageFrame(np.clip(output, 0.0, 1.0).astype(np.float32), frame.record)
 
     @staticmethod
-    def _psf(frame: ImageFrame, parameters: dict[str, Any]) -> np.ndarray:
+    def _psf(frame: ImageFrame, parameters: dict[str, Any]) -> NDArray[np.float32]:
         scale = min(frame.pixels.shape[:2])
         if "radius_fraction" in parameters:
             radius = max(1, round(scale * float(parameters["radius_fraction"])))
@@ -45,4 +46,3 @@ class WienerDeconvolution(RestorationStrategy):
             length = max(2, round(scale * float(parameters["length_fraction"])))
             return motion_psf(length, float(parameters["angle_degrees"]))
         raise ValueError("Wiener deconvolution requires recorded blur PSF parameters.")
-

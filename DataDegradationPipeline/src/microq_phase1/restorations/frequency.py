@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 import numpy as np
+from numpy.typing import NDArray
 
 from microq_phase1.domain.strategies import ImageFrame, RestorationStrategy
 
@@ -26,11 +27,11 @@ class NotchRejectRestoration(RestorationStrategy):
 
     def _filter(
         self,
-        pixels: np.ndarray,
+        pixels: NDArray[np.float32],
         cycles: float,
         angle: float,
         radius: float,
-    ) -> np.ndarray:
+    ) -> NDArray[np.float32]:
         if pixels.ndim == 2:
             return self._filter_channel(pixels, cycles, angle, radius)
         return np.stack(
@@ -43,11 +44,11 @@ class NotchRejectRestoration(RestorationStrategy):
 
     @staticmethod
     def _filter_channel(
-        channel: np.ndarray,
+        channel: NDArray[np.float32],
         cycles: float,
         angle: float,
         radius: float,
-    ) -> np.ndarray:
+    ) -> NDArray[np.float32]:
         height, width = channel.shape
         spectrum = np.fft.fftshift(np.fft.fft2(channel))
         yy, xx = np.mgrid[0:height, 0:width]
@@ -63,4 +64,3 @@ class NotchRejectRestoration(RestorationStrategy):
             mask[distance <= radius] = 0.0
         restored = np.fft.ifft2(np.fft.ifftshift(spectrum * mask)).real
         return restored.astype(np.float32)
-

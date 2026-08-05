@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import os
+from collections import Counter
 from collections.abc import Iterator
+from hashlib import sha256
 from pathlib import Path
 from typing import Any
 
@@ -51,54 +53,157 @@ class MicroBenchExporter:
         config: MicroBenchExportConfig,
     ) -> Iterator[ImageRecord]:
         limit = config.max_records or len(dataset)
+        grouped: dict[str, dict[str, Any]] = {}
+        excluded_licenses: Counter[str] = Counter()
         for index, item in enumerate(dataset):
             if index >= limit:
-                return
+                break
+            license_name = str(item.get("license") or "unknown")
+            if (
+                config.included_licenses is not None
+                and license_name not in config.included_licenses
+            ):
+                excluded_licenses[license_name] += 1
+                continue
             image_id = str(item["image_id"])
-            image_path = config.output_root / "images" / f"{image_id}.png"
             image = item["image"]
-            self._save_lossless(image, image_path)
-            mask_path = self._masks.export(
-                item.get("polygon"),
-                width=image.width,
-                height=image.height,
-                output_path=config.output_root / "masks" / f"{image_id}.png",
-            )
+            digest = self._image_digest(image)
+            properties = self._image_properties(item, image)
+            annotation = self._benchmark_annotation(item, index)
+            source_dataset = str(item.get("dataset") or "unknown")
+
+            if image_id in grouped:
+                group = grouped[image_id]
+                if group["digest"] != digest:
+                    raise ValueError(
+                        f"Micro-Bench image_id {image_id!r} refers to different image pixels."
+                    )
+                if group["properties"] != properties:
+                    differing = sorted(
+                        key
+                        for key, value in properties.items()
+                        if group["properties"][key] != value
+                    )
+                    raise ValueError(
+                        f"Micro-Bench image_id {image_id!r} has inconsistent image "
+                        f"metadata: {', '.join(differing)}"
+                    )
+                if source_dataset not in group["source_datasets"]:
+                    group["source_datasets"].append(source_dataset)
+                group["annotations"].append(annotation)
+                group["polygons"].append(item.get("polygon"))
+            else:
+                image_path = config.output_root / "images" / f"{image_id}.png"
+                self._save_lossless(image, image_path, expected_digest=digest)
+                grouped[image_id] = {
+                    "image_path": image_path,
+                    "digest": digest,
+                    "properties": properties,
+                    "source_datasets": [source_dataset],
+                    "annotations": [annotation],
+                    "polygons": [item.get("polygon")],
+                    "width": image.width,
+                    "height": image.height,
+                }
             if (index + 1) % 500 == 0:
                 LOGGER.info(
                     "microbench_export_progress",
                     completed=index + 1,
                     total=min(limit, len(dataset)),
                 )
+
+        if config.included_licenses is not None:
+            LOGGER.info(
+                "microbench_license_filter_applied",
+                included_licenses=sorted(config.included_licenses),
+                excluded_by_license=dict(sorted(excluded_licenses.items())),
+                included_source_rows=sum(len(group["annotations"]) for group in grouped.values()),
+            )
+
+        for image_id, group in grouped.items():
+            properties = group["properties"]
+            mask_path = self._masks.export(
+                group["polygons"],
+                width=group["width"],
+                height=group["height"],
+                output_path=config.output_root / "masks" / f"{image_id}.png",
+            )
             yield ImageRecord(
                 image_id=image_id,
-                image_path=image_path.resolve(),
-                source_dataset=str(item.get("dataset") or "unknown"),
-                license=str(item.get("license") or "unknown"),
+                image_path=group["image_path"].resolve(),
+                source_dataset=group["source_datasets"][0],
+                license=properties["license"],
                 pool_role=PoolRole.EVALUATION,
-                modality=self._map_modality(item.get("modality")),
-                submodality=self._optional_text(item.get("submodality")),
-                domain=self._optional_text(item.get("domain")),
-                subdomain=self._optional_text(item.get("subdomain")),
-                stain=self._optional_text(item.get("stain")),
-                microns_per_pixel=self._positive_float(item.get("microns_per_pixel")),
+                modality=properties["modality"],
+                submodality=properties["submodality"],
+                domain=properties["domain"],
+                subdomain=properties["subdomain"],
+                stain=properties["stain"],
+                microns_per_pixel=properties["microns_per_pixel"],
                 mask_path=mask_path,
-                group_id=str(item.get("image_id")),
-                is_multichannel=self._is_multichannel(item["image"]),
-                bit_depth=self._bit_depth(item["image"]),
+                group_id=image_id,
+                is_multichannel=properties["is_multichannel"],
+                bit_depth=properties["bit_depth"],
                 metadata={
-                    "label": item.get("label"),
-                    "label_name": item.get("label_name"),
-                    "questions": item.get("questions"),
-                    "captions": item.get("captions"),
-                    "synthetic": item.get("synthetic"),
-                    "bbox": item.get("bbox"),
+                    "source_datasets": group["source_datasets"],
+                    "benchmark_annotations": group["annotations"],
                     "dataset_revision": config.revision,
                 },
             )
 
+    def _image_properties(self, item: dict[str, Any], image: Image.Image) -> dict[str, Any]:
+        """Return fields that must agree when task rows reuse one source image."""
+        return {
+            "license": str(item.get("license") or "unknown"),
+            "modality": self._map_modality(item.get("modality")),
+            "submodality": self._optional_text(item.get("submodality")),
+            "domain": self._optional_text(item.get("domain")),
+            "subdomain": self._optional_text(item.get("subdomain")),
+            "stain": self._optional_text(item.get("stain")),
+            "microns_per_pixel": self._positive_float(item.get("microns_per_pixel")),
+            "is_multichannel": self._is_multichannel(image),
+            "bit_depth": self._bit_depth(image),
+        }
+
     @staticmethod
-    def _save_lossless(image: Image.Image, path: Path) -> None:
+    def _benchmark_annotation(item: dict[str, Any], index: int) -> dict[str, Any]:
+        """Preserve every task row associated with a physical benchmark image."""
+        return {
+            "source_row_index": index,
+            "source_dataset": str(item.get("dataset") or "unknown"),
+            "label": item.get("label"),
+            "label_name": item.get("label_name"),
+            "questions": item.get("questions"),
+            "captions": item.get("captions"),
+            "synthetic": item.get("synthetic"),
+            "bbox": item.get("bbox"),
+        }
+
+    @staticmethod
+    def _image_digest(image: Image.Image) -> str:
+        digest = sha256()
+        digest.update(image.mode.encode("utf-8"))
+        digest.update(str(image.size).encode("ascii"))
+        digest.update(image.tobytes())
+        return digest.hexdigest()
+
+    @classmethod
+    def _save_lossless(
+        cls,
+        image: Image.Image,
+        path: Path,
+        *,
+        expected_digest: str,
+    ) -> None:
+        if path.is_file():
+            try:
+                with Image.open(path) as existing:
+                    existing.load()
+                    if cls._image_digest(existing) == expected_digest:
+                        return
+            except (OSError, ValueError):
+                # A stale or damaged file is replaced atomically below.
+                pass
         path.parent.mkdir(parents=True, exist_ok=True)
         temporary = path.with_suffix(path.suffix + ".tmp")
         image.save(temporary, format="PNG")
@@ -122,6 +227,8 @@ class MicroBenchExporter:
 
     @staticmethod
     def _positive_float(value: object) -> float | None:
+        if not isinstance(value, str | bytes | int | float):
+            return None
         try:
             parsed = float(value)
         except (TypeError, ValueError):

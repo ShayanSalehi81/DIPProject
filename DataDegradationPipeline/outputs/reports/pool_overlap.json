@@ -1,0 +1,43 @@
+{
+  "exact_cross_role_duplicates": [],
+  "license_violations": [],
+  "near_cross_role_duplicates": [],
+  "perceptual_hamming_threshold": 4,
+  "policy": "strict_two_pool",
+  "pool_summary": {
+    "external_development": {
+      "images": 147,
+      "modalities": {
+        "electron": 26,
+        "fluorescence": 87,
+        "light": 34
+      },
+      "official_benchmark": false,
+      "role": "development",
+      "source_datasets": 3
+    },
+    "external_training": {
+      "images": 804,
+      "modalities": {
+        "electron": 57,
+        "fluorescence": 556,
+        "light": 191
+      },
+      "official_benchmark": false,
+      "role": "training",
+      "source_datasets": 3
+    },
+    "microbench_evaluation": {
+      "images": 11966,
+      "modalities": {
+        "electron": 833,
+        "fluorescence": 3635,
+        "light": 7498
+      },
+      "official_benchmark": true,
+      "role": "evaluation",
+      "source_datasets": 15
+    }
+  },
+  "status": "passed"
+}

@@ -137,11 +137,13 @@ def analyze_restored(
     """Measure restored artifacts using the same DIP protocol."""
 
     def action(config: ProjectConfig, services: dict[str, Any]) -> int:
-        return services["analysis"].analyze(
-            config,
-            manifest_path=config.restoration.manifest_path,
-            output_jsonl=config.analysis.restored_output_jsonl,
-            output_csv=config.analysis.restored_output_csv,
+        return int(
+            services["analysis"].analyze(
+                config,
+                manifest_path=config.restoration.manifest_path,
+                output_jsonl=config.analysis.restored_output_jsonl,
+                output_csv=config.analysis.restored_output_csv,
+            )
         )
 
     execute(config_path, "analyze-restored", action)

@@ -29,6 +29,8 @@ microbench_export:
   catalog_path: ../data/catalogs/microbench_evaluation.jsonl
   cache_dir: ../data/cache/huggingface
   max_records: null
+  # Conservative evaluation subset: unresolved and non-commercial sources are excluded.
+  included_licenses: [CC-BY-4.0, CC-BY-SA-4.0, CC0]
 
 logging:
   level: INFO
@@ -164,7 +166,7 @@ restoration:
       parameters: {clip_limit: 0.01}
     - degradation: chromatic_misregistration
       algorithm: channel_registration
-      parameters: {upsample_factor: 20}
+      parameters: {upsample_factor: 20, maximum_displacement_factor: 2.0}
     - degradation: saturation
       algorithm: gamma_clahe
       parameters: {gamma: 1.2, clip_limit: 0.01}
@@ -176,7 +178,7 @@ validation:
   minimum_monotonic_fraction: 0.80
   fail_on_near_duplicate: true
   license_allowlist:
-    [CC-BY-4.0, CC-BY-SA-4.0, CC0-1.0, MIT, Public Domain]
+    [CC-BY-4.0, CC-BY-SA-4.0, CC0, CC0-1.0, MIT, Public Domain]
   report_path: ../outputs/reports/validation.json
   overlap_report_path: ../outputs/reports/pool_overlap.json
 

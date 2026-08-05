@@ -1,0 +1,10 @@
+{
+  "command": "audit-pools",
+  "config_path": "/home/dev/shayan_workspace/DIPProject/DataDegradationPipeline/configs/phase1.yaml",
+  "config_sha256": "9c6be12cc9d2a64eff04ab75278a134df45207eefee877f4a4c0e7dc71602afb",
+  "microq_phase1_version": "0.1.0",
+  "platform": "Linux-5.15.0-153-generic-x86_64-with-glibc2.35",
+  "python_version": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+  "run_id": "69088aa7ca6d42c29cfd392197474ec8",
+  "started_at_utc": "2026-08-04T16:43:38.720363+00:00"
+}

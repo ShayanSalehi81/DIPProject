@@ -5,10 +5,10 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+from microq_phase1.application.quality_gates import DatasetQualityGateEvaluator
 from microq_phase1.core.config import ProjectConfig
 from microq_phase1.core.errors import ValidationFailure
 from microq_phase1.core.logging import get_logger
-from microq_phase1.application.quality_gates import DatasetQualityGateEvaluator
 from microq_phase1.domain.models import AnalysisRecord, RecipeRecord
 from microq_phase1.infrastructure.hashing import ImageHasher
 from microq_phase1.infrastructure.jsonl import read_jsonl, write_json_atomic
@@ -54,9 +54,9 @@ class DatasetValidationService:
         self._quality_gates.validate_severity_balance(config, recipes, warnings)
         monotonicity = self._quality_gates.severity_monotonicity(analyses)
         if monotonicity["eligible_groups"] == 0:
-                warnings.append(
-                    "No complete single-degradation severity triplets were available."
-                )
+            warnings.append(
+                "No complete single-degradation severity triplets were available."
+            )
         elif (
             monotonicity["monotonic_fraction"]
             < config.validation.minimum_monotonic_fraction
