@@ -1,0 +1,1035 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Micro-Q-Instruct — DIP Project Presentation</title>
+  <style>
+@page { size: 13.333in 7.5in; margin: 0; }
+* { box-sizing: border-box; }
+:root {
+  --ink: #0e2736; --navy: #0a3344; --teal: #007f79; --mint: #b9e5db;
+  --coral: #e86452; --gold: #c6963f; --paper: #f7f5ef; --white: #ffffff;
+  --muted: #5a6a72; --line: #d8dedc; --soft: #eaf0ee; --blue: #276e8a;
+}
+html, body { margin: 0; padding: 0; background: #cfd6d4; color: var(--ink); }
+body { font-family: "DejaVu Sans", Arial, sans-serif; }
+.slide { width: 13.333in; height: 7.5in; page-break-after: always; position: relative; overflow: hidden; background: var(--paper); }
+.slide:last-child { page-break-after: auto; }
+.slide::before { content: ""; position: absolute; width: 170px; height: 170px; right: -92px; top: -94px; border: 1px solid rgba(0,127,121,.20); border-radius: 50%; }
+.slide::after { content: ""; position: absolute; width: 72px; height: 72px; right: -36px; top: -36px; background: var(--mint); border-radius: 50%; opacity: .48; }
+.slide-inner { position: absolute; inset: 46px 62px 48px 62px; z-index: 2; }
+.footer { position: absolute; z-index: 4; left: 62px; right: 62px; bottom: 18px; display: flex; align-items: center; gap: 14px; color: #5f7076; font-size: 11px; letter-spacing: .10em; text-transform: uppercase; }
+.footer-rule { height: 1px; flex: 1; background: #c7d0ce; }
+.page-number { font-weight: 800; color: var(--navy); }
+.eyebrow { color: var(--teal); font-weight: 800; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 9px; }
+h1, h2, h3, p { margin-top: 0; }
+h1 { font-family: "DejaVu Serif", Georgia, serif; font-size: 42px; line-height: 1.07; letter-spacing: -.025em; margin-bottom: 20px; color: var(--navy); }
+h2 { font-family: "DejaVu Serif", Georgia, serif; font-size: 28px; line-height: 1.15; color: var(--navy); }
+h3 { font-size: 18px; line-height: 1.2; color: var(--navy); margin-bottom: 8px; }
+p, li { font-size: 17px; line-height: 1.48; }
+.lead { font-family: "DejaVu Serif", Georgia, serif; font-size: 25px; line-height: 1.35; color: #294856; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; line-height: 1.4; }
+.tiny { font-size: 11px; line-height: 1.35; }
+.accent { color: var(--teal); }
+.coral { color: var(--coral); }
+.gold { color: var(--gold); }
+.title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 25px; }
+.title-row h1 { margin-bottom: 13px; }
+.pill { display: inline-block; border-radius: 999px; padding: 6px 11px; background: #e1efec; color: var(--teal); font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+.pill.danger { background: #f7ddd7; color: #a83e31; }
+.pill.dark { background: var(--navy); color: white; }
+.pill.gold-pill { background: #f1e6cc; color: #79591e; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 19px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+.card { background: rgba(255,255,255,.78); border: 1px solid var(--line); border-radius: 14px; padding: 18px; box-shadow: 0 7px 20px rgba(14,39,54,.045); }
+.card.teal-top { border-top: 5px solid var(--teal); }
+.card.coral-top { border-top: 5px solid var(--coral); }
+.card.gold-top { border-top: 5px solid var(--gold); }
+.card.dark-card { background: var(--navy); color: white; border-color: var(--navy); }
+.card.dark-card h3, .card.dark-card h2 { color: white; }
+.number { font-size: 38px; line-height: 1; font-weight: 800; color: var(--teal); letter-spacing: -.04em; }
+.number.coral-num { color: var(--coral); }
+.kicker { font-size: 12px; font-weight: 800; color: var(--teal); text-transform: uppercase; letter-spacing: .11em; }
+.callout { border-left: 5px solid var(--coral); background: #fff4ef; padding: 15px 18px; border-radius: 0 12px 12px 0; }
+.takeaway { border-left: 5px solid var(--teal); background: #eaf5f2; padding: 14px 18px; border-radius: 0 12px 12px 0; font-size: 16px; line-height: 1.38; }
+.clean-list { list-style: none; padding: 0; margin: 0; }
+.clean-list li { position: relative; padding-left: 22px; margin: 9px 0; }
+.clean-list li::before { content: ""; position: absolute; width: 8px; height: 8px; left: 0; top: .55em; border-radius: 50%; background: var(--teal); }
+.divider { height: 1px; background: var(--line); margin: 16px 0; }
+.big-quote { font-family: "DejaVu Serif", Georgia, serif; font-size: 31px; line-height: 1.30; color: var(--navy); max-width: 850px; }
+.quote-mark { font-size: 80px; color: var(--mint); line-height: .3; vertical-align: -25px; margin-right: 8px; }
+.source-line { font-size: 11px; color: var(--muted); margin-top: 12px; }
+.micro-source { font-size: 9px; color: var(--muted); text-align: right; margin-top: 4px; }
+
+/* Title */
+.title-slide { background: var(--navy); color: white; }
+.title-slide::before { width: 520px; height: 520px; border-color: rgba(185,229,219,.18); right: -155px; top: -180px; }
+.title-slide::after { width: 250px; height: 250px; right: -90px; top: -95px; background: var(--teal); opacity: .35; }
+.title-slide .slide-inner { inset: 44px 58px 48px 58px; }
+.title-slide .footer { color: #aac4c8; }
+.title-slide .footer-rule { background: #315565; }
+.title-slide .page-number { color: white; }
+.title-main { display: grid; grid-template-columns: 1.2fr .8fr; gap: 42px; height: 100%; align-items: center; }
+.title-slide .eyebrow { color: var(--mint); }
+.title-slide h1 { color: white; font-size: 54px; margin-bottom: 17px; }
+.title-sub { font-size: 21px; color: #c9dbdd; line-height: 1.4; max-width: 650px; }
+.authors { display: flex; gap: 28px; margin-top: 28px; }
+.author { border-top: 1px solid #547382; padding-top: 10px; min-width: 210px; }
+.author b { display: block; font-size: 16px; }
+.author span { color: #a9c0c5; font-size: 12px; }
+.institution { margin-top: 26px; color: #a9c0c5; font-size: 13px; line-height: 1.5; }
+.hero-stack { position: relative; height: 465px; }
+.hero-img { position: absolute; width: 310px; height: 205px; object-fit: cover; border-radius: 15px; border: 5px solid rgba(255,255,255,.92); box-shadow: 0 20px 45px rgba(0,0,0,.28); }
+.hero-a { top: 14px; left: 10px; transform: rotate(-4deg); }
+.hero-b { top: 132px; right: 4px; transform: rotate(4deg); }
+.hero-c { bottom: 0; left: 18px; transform: rotate(-2deg); }
+.hero-chip { position: absolute; right: 22px; bottom: 32px; background: var(--coral); color: white; font-weight: 800; border-radius: 999px; padding: 9px 15px; font-size: 12px; box-shadow: 0 9px 20px rgba(0,0,0,.2); }
+
+/* Flow diagrams */
+.flow { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 20px 0; }
+.flow-node { border: 1px solid #b9c8c7; background: white; border-radius: 12px; padding: 15px 12px; text-align: center; width: 155px; min-height: 72px; display: flex; flex-direction: column; justify-content: center; }
+.flow-node strong { color: var(--navy); font-size: 14px; }
+.flow-node span { color: var(--muted); font-size: 10px; margin-top: 4px; }
+.flow-node.teal-node { background: var(--teal); border-color: var(--teal); }
+.flow-node.teal-node strong, .flow-node.teal-node span { color: white; }
+.flow-node.coral-node { background: #fff0eb; border-color: #efb4a8; }
+.arrow { color: var(--teal); font-size: 24px; font-weight: 800; }
+.branch-flow { display: grid; grid-template-columns: 215px 45px 1fr; align-items: center; gap: 9px; }
+.branch-source { background: var(--navy); color: white; padding: 24px 18px; border-radius: 14px; text-align: center; }
+.branch-source b { display: block; font-size: 20px; }
+.branch-source span { font-size: 11px; color: #c1d4d7; }
+.branches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 13px; }
+.branch { background: white; border-radius: 13px; border: 1px solid var(--line); padding: 16px; min-height: 104px; }
+.branch b { display: block; color: var(--teal); font-size: 15px; margin-bottom: 6px; }
+.branch span { font-size: 11px; line-height: 1.4; color: var(--muted); }
+
+/* Triptychs */
+.triptych { display: grid; grid-template-columns: repeat(3, 1fr); gap: 17px; }
+.image-card { margin: 0; background: white; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; box-shadow: 0 7px 18px rgba(14,39,54,.055); }
+.image-card img { display: block; width: 100%; height: 260px; object-fit: cover; background: #081013; }
+.image-label { height: 34px; padding: 8px 11px; font-size: 12px; font-weight: 800; color: var(--navy); }
+.image-label span { color: var(--teal); margin-right: 8px; }
+.degraded-card { border-color: #e9b3a8; }
+.degraded-card .image-label span { color: var(--coral); }
+.restored-card { border-color: #92c8ba; }
+.image-card figcaption { padding: 8px 11px; color: var(--muted); font-size: 10px; }
+.method-line { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 13px; }
+.method-line > div { display: grid; grid-template-columns: 66px 1fr; border-top: 1px solid var(--line); padding-top: 9px; }
+.method-line b { font-size: 11px; text-transform: uppercase; letter-spacing: .09em; color: var(--teal); }
+.method-line span { font-size: 11px; line-height: 1.35; color: #344d58; }
+
+/* Charts */
+.figure-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.figure-frame { background: white; border: 1px solid var(--line); border-radius: 14px; padding: 8px; height: 370px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.figure-frame img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.figure-frame.large { height: 430px; }
+.analysis-lines { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 12px; }
+.analysis-line { border-left: 4px solid var(--teal); padding-left: 12px; font-size: 13px; line-height: 1.38; color: #304b56; }
+.analysis-line:nth-child(2) { border-left-color: var(--coral); }
+.single-figure-layout { display: grid; grid-template-columns: 1.75fr .75fr; gap: 22px; align-items: stretch; }
+.single-figure-layout .figure-frame { height: 465px; }
+.insight-panel { display: flex; flex-direction: column; gap: 12px; justify-content: center; }
+.insight { background: white; border: 1px solid var(--line); border-radius: 12px; padding: 15px; }
+.insight b { color: var(--teal); font-size: 24px; display: block; margin-bottom: 5px; }
+.insight span { font-size: 12px; line-height: 1.35; color: var(--muted); }
+
+/* Bars / tables */
+.bar-row { display: grid; grid-template-columns: 130px 1fr 55px; gap: 10px; align-items: center; margin: 11px 0; }
+.bar-label { font-size: 12px; font-weight: 700; color: var(--navy); }
+.bar-track { height: 13px; background: #e4e9e7; border-radius: 999px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--teal); border-radius: 999px; }
+.bar-fill.coral-fill { background: var(--coral); }
+.bar-fill.gold-fill { background: var(--gold); }
+.bar-value { font-size: 11px; font-weight: 800; text-align: right; color: var(--muted); }
+.mini-table { width: 100%; border-collapse: collapse; }
+.mini-table th { text-align: left; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; padding: 7px; border-bottom: 1px solid var(--line); }
+.mini-table td { padding: 7px; border-bottom: 1px solid #e6eae8; font-size: 12px; }
+.good { color: var(--teal); font-weight: 800; }
+.bad { color: #b44436; font-weight: 800; }
+.neutral { color: var(--muted); font-weight: 800; }
+
+/* Course map */
+.course-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 13px; }
+.course-item { background: white; border: 1px solid var(--line); border-radius: 12px; padding: 15px; min-height: 150px; }
+.course-no { font-size: 11px; font-weight: 800; color: var(--coral); letter-spacing: .08em; }
+.course-item h3 { font-size: 15px; margin: 8px 0 6px; }
+.course-item p { font-size: 11px; line-height: 1.4; color: var(--muted); margin: 0; }
+
+/* Timeline / stats */
+.stat-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 13px; margin: 14px 0 20px; }
+.stat { background: white; border: 1px solid var(--line); border-radius: 13px; padding: 14px; }
+.stat b { display: block; font-size: 28px; color: var(--teal); letter-spacing: -.03em; }
+.stat span { display: block; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.timeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-top: 25px; }
+.time-step { position: relative; padding: 25px 12px 0; border-top: 2px solid #b9ccc8; }
+.time-step::before { content: ""; position: absolute; width: 14px; height: 14px; border-radius: 50%; background: var(--teal); top: -8px; left: 12px; }
+.time-step b { display: block; color: var(--navy); font-size: 13px; margin-bottom: 5px; }
+.time-step span { font-size: 10px; line-height: 1.35; color: var(--muted); }
+
+/* Conclusion / outro */
+.conclusion-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.conclusion-card { border-top: 6px solid var(--teal); background: white; border-radius: 14px; padding: 22px 19px; min-height: 230px; }
+.conclusion-card:nth-child(2) { border-top-color: var(--coral); }
+.conclusion-card:nth-child(3) { border-top-color: var(--gold); }
+.conclusion-card .number { font-size: 30px; }
+.conclusion-card p { font-size: 14px; line-height: 1.45; color: var(--muted); }
+.outro { background: var(--navy); color: white; }
+.outro::before { border-color: rgba(255,255,255,.15); width: 550px; height: 550px; right: -140px; top: -230px; }
+.outro::after { background: var(--teal); opacity: .32; width: 260px; height: 260px; right: -50px; top: -100px; }
+.outro h1 { color: white; font-size: 64px; }
+.outro .footer { color: #aac4c8; }
+.outro .footer-rule { background: #315565; }
+.outro .page-number { color: white; }
+.outro-center { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; max-width: 850px; }
+.question { font-family: "DejaVu Serif", Georgia, serif; color: var(--mint); font-size: 25px; margin: 15px 0 28px; }
+.outro-authors { color: #bcd1d4; font-size: 14px; line-height: 1.7; }
+</style>
+</head>
+<body>
+<section class="slide title-slide">
+      <div class="slide-inner">
+      <div class="title-main">
+        <div>
+          <div class="eyebrow">Digital Image Processing Course · Final Project</div>
+          <h1>Micro-Q-Instruct</h1>
+          <div class="title-sub">A degradation-aware microscopy benchmark—from controlled classical image processing to paired VLM robustness.</div>
+          <div class="authors">
+            <div class="author"><b>Shayan Salehi</b><span>Student ID · 404203509</span></div>
+            <div class="author"><b>Ali Hezaveh</b><span>Student ID · 404208531</span></div>
+          </div>
+          <div class="institution"><b>Sharif University of Technology</b><br>Department of Computer Engineering · Instructor: Prof. Kasaei</div>
+        </div>
+        <div class="hero-stack">
+          <img class="hero-img hero-a" src="assets/photobleaching_clean.jpg" alt="Fluorescence microscopy">
+          <img class="hero-img hero-b" src="assets/jpeg_clean.jpg" alt="Light microscopy">
+          <img class="hero-img hero-c" src="assets/motion_clean.jpg" alt="Electron microscopy">
+          <div class="hero-chip">30,960 paired derivatives</div>
+        </div>
+      </div>
+    </div>
+      
+      <div class="footer">
+        <span>Micro-Q-Instruct · DIP Project</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">01 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Why image quality belongs in microscopy reasoning</div>
+      <h1>VLMs see the specimen through an acquisition pipeline</h1>
+      <div class="grid-2" style="grid-template-columns: 1.15fr .85fr; align-items:center; margin-top:24px;">
+        <div>
+          <div class="big-quote"><span class="quote-mark">“</span>A correct semantic answer may depend on blur, noise, sampling, compression, registration, and detector response—not only biological content.</div>
+          <div class="source-line">Motivated by Micro-Bench’s microscopy errors and Q-Instruct’s low-level vision curriculum.</div>
+        </div>
+        <div class="card dark-card">
+          <div class="kicker" style="color:var(--mint)">The missing link</div>
+          <h2 style="margin-top:9px">Quality → evidence → answer</h2>
+          <p style="font-size:15px;color:#c7d8db">Natural-image quality benchmarks rarely model microscopy physics; microscopy VLM benchmarks rarely isolate low-level corruption.</p>
+          <div class="divider" style="background:#315565"></div>
+          <p style="font-size:14px;margin:0"><b style="color:var(--mint)">Our response:</b> a traceable, paired benchmark in which every corruption and restoration is known.</p>
+        </div>
+      </div>
+    </div>
+      
+      <div class="footer">
+        <span>Introduction · Motivation</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">02 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Project thesis</div>
+      <h1>Three questions, one paired experimental spine</h1>
+      <div class="grid-3" style="margin-top:25px">
+        <div class="card teal-top"><div class="number">01</div><h3>Detect</h3><p class="small muted">Can an interpretable DIP fingerprint identify degradation family and severity across microscopy domains?</p></div>
+        <div class="card coral-top"><div class="number coral-num">02</div><h3>Restore</h3><p class="small muted">Which matched classical method recovers fidelity, edges, and morphology—and where is information irreversibly lost?</p></div>
+        <div class="card gold-top"><div class="number gold">03</div><h3>Stress-test</h3><p class="small muted">Does Qwen3-VL preserve the same correct answer across clean, degraded, and restored views?</p></div>
+      </div>
+      <div class="takeaway" style="margin-top:25px"><b>Design principle:</b> change the pixels; hold the question, options, answer, model, prompt, and decoding fixed.</div>
+    </div>
+      
+      <div class="footer">
+        <span>Introduction · Research Questions</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">03 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Operational syllabus alignment</div>
+      <h1>Every course chapter becomes an implemented artifact</h1>
+      <div class="course-grid"><div class="course-item"><div class="course-no">CH. 2</div><h3>Digital fundamentals</h3><p>Sampling, anti-aliasing, quantization, pixel precision</p></div><div class="course-item"><div class="course-no">CH. 3</div><h3>Spatial processing</h3><p>PSFs, gradients, Laplacian, gamma, CLAHE</p></div><div class="course-item"><div class="course-no">CH. 4</div><h3>Frequency domain</h3><p>Spectral energy, sinusoidal interference, notch rejection</p></div><div class="course-item"><div class="course-no">CH. 5</div><h3>Restoration</h3><p>Poisson/read noise, local Wiener, deconvolution</p></div><div class="course-item"><div class="course-no">CH. 7</div><h3>Transforms</h3><p>Wavelet energy fingerprints and denoising</p></div><div class="course-item"><div class="course-no">CH. 8</div><h3>Compression</h3><p>Controlled JPEG and block-boundary evidence</p></div><div class="course-item"><div class="course-no">CH. 9</div><h3>Morphology</h3><p>Otsu proxy masks, Dice/IoU, components</p></div><div class="course-item"><div class="course-no">BRIDGE</div><h3>Vision-language robustness</h3><p>Paired inference, uncertainty, exact-answer scoring</p></div></div>
+      <div class="source-line">Foundations: Micro-Bench (NeurIPS 2024) · Q-Instruct (CVPR 2024) · Q-Bench (ICLR 2024)</div>
+    </div>
+      
+      <div class="footer">
+        <span>Introduction · Course Alignment</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">04 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">From pixels to robustness evidence</div>
+      <h1>The project is a two-phase causal chain</h1>
+      <div class="flow" style="margin-top:42px">
+        <div class="flow-node"><strong>Clean microscopy</strong><span>external + official evaluation pools</span></div><div class="arrow">→</div>
+        <div class="flow-node coral-node"><strong>Controlled degradation</strong><span>10 families · 3 severities</span></div><div class="arrow">→</div>
+        <div class="flow-node"><strong>DIP fingerprint</strong><span>spatial · frequency · wavelet · artifact</span></div><div class="arrow">→</div>
+        <div class="flow-node teal-node"><strong>Matched restoration</strong><span>algorithm + provenance</span></div><div class="arrow">→</div>
+        <div class="flow-node"><strong>Paired VLM test</strong><span>clean · degraded · restored</span></div>
+      </div>
+      <div class="grid-2" style="margin-top:34px">
+        <div class="card"><span class="pill">Phase 1</span><h3 style="margin-top:12px">Classical DIP benchmark</h3><p class="small muted">Produces paired images, exact recipes, interpretable measurements, morphology metrics, restorations, and a classical baseline.</p></div>
+        <div class="card"><span class="pill danger">Phase 1.5</span><h3 style="margin-top:12px">Inference-time robustness</h3><p class="small muted">Measures answer stability with paired statistics; no model training or fine-tuning occurs.</p></div>
+      </div>
+    </div>
+      
+      <div class="footer">
+        <span>Overview · Phase 1</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">05 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Strict two-pool policy</div>
+      <h1>Train on permissive sources; evaluate only on pinned Micro-Bench</h1>
+      <div class="grid-2" style="grid-template-columns: 1.05fr .95fr; gap:22px">
+        <div>
+          <div class="branch-flow">
+            <div class="branch-source"><b>1,701</b><span>unique clean sources</span></div><div class="arrow">→</div>
+            <div class="branches">
+              <div class="branch"><b>804</b><span>training · BBBC010, BBBC038, IDR0067</span></div>
+              <div class="branch"><b>147</b><span>development · held out for calibration</span></div>
+              <div class="branch"><b>750</b><span>evaluation · 15 official Micro-Bench datasets</span></div>
+            </div>
+          </div>
+          <div class="takeaway" style="margin-top:20px"><b>Contamination guard:</b> decoded-pixel SHA-256 + 64-bit perceptual-hash nearest-neighbor audit + license allowlist.</div>
+        </div>
+        <div class="card">
+          <h3>Source composition</h3>
+          <div class="bar-row"><span class="bar-label">Fluorescence</span><span class="bar-track"><span class="bar-fill" style="display:block;width:52.5%"></span></span><span class="bar-value">893</span></div>
+          <div class="bar-row"><span class="bar-label">Light</span><span class="bar-track"><span class="bar-fill coral-fill" style="display:block;width:36.7%"></span></span><span class="bar-value">625</span></div>
+          <div class="bar-row"><span class="bar-label">Electron</span><span class="bar-track"><span class="bar-fill gold-fill" style="display:block;width:10.8%"></span></span><span class="bar-value">183</span></div>
+          <div class="divider"></div>
+          <p class="tiny muted" style="margin:0">Licenses retained per record: CC0 / CC0-1.0 / CC-BY-4.0 / CC-BY-SA-4.0. Micro-Bench revision pinned to <b>3f2c5b59…</b></p>
+        </div>
+      </div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1 · Data &amp; Integrity</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">06 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Balanced, deterministic degradation planning</div>
+      <h1>15,480 recipes become 30,960 paired derivatives</h1>
+      <div class="stat-strip">
+        <div class="stat"><b>10</b><span>degradation families</span></div>
+        <div class="stat"><b>3</b><span>severity levels</span></div>
+        <div class="stat"><b>15,480</b><span>degraded images</span></div>
+        <div class="stat"><b>15,480</b><span>restored images</span></div>
+      </div>
+      <div class="grid-2">
+        <div class="card teal-top">
+          <h3>Balanced incomplete factorial</h3>
+          <p class="small muted">Nine variants per source select three applicable families × weak/medium/strong. Deterministic clean controls and mixed corruptions are added at configured fractions.</p>
+          <div class="pill">master seed · 20260724</div>
+        </div>
+        <div class="card coral-top">
+          <h3>Physics-aware applicability</h3>
+          <p class="small muted">Photobleaching and channel shift require fluorescence; chromatic shift requires multichannel content; defocus is restricted to optical modalities.</p>
+          <div class="pill danger">parameters scale with image size</div>
+        </div>
+      </div>
+      <div class="source-line">Every recipe preserves image role, exact parameters, seed, bit depth, SHA-256, source license, and output path.</div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1 · Generation</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">07 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Interpretable evidence—not a black box</div>
+      <h1>Each image yields a fingerprint, paired metrics, and a matched baseline</h1>
+      <div class="grid-3">
+        <div class="card teal-top"><h3>19-feature fingerprint</h3><p class="small muted">Histogram, entropy, gradient/Laplacian, Fourier ratios, spectral centroid, wavelet energy, blockiness, clipping, and channel shift.</p></div>
+        <div class="card coral-top"><h3>Paired image evidence</h3><p class="small muted">MSE, PSNR, SSIM, edge retention, histogram JS divergence; Dice/IoU, area, and components where masks exist.</p></div>
+        <div class="card gold-top"><h3>Strategy registry</h3><p class="small muted">Local Wiener, PSF-aware deconvolution, notch rejection, channel registration, gamma/CLAHE, and wavelet comparisons.</p></div>
+      </div>
+      <div class="takeaway" style="margin-top:22px"><b>Validated release:</b> 15,480 analyses, 0 errors, 0 warnings; 3,743 / 3,745 eligible severity triplets are PSNR-monotonic.</div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1 · Measurement &amp; Restoration</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">08 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Phase 1 · degradation family 01 / 10</div>
+      <div class="title-row">
+        <h1>Sampling / resolution loss</h1>
+        <span class="pill danger">Strong severity</span>
+      </div>
+      <div class="triptych">
+        <figure class="image-card clean-card">
+          <div class="image-label"><span>01</span> Clean reference</div>
+          <img src="assets/sampling_clean.jpg" alt="Clean microscopy image">
+          <figcaption>Original · Light</figcaption>
+        </figure>
+        <figure class="image-card degraded-card">
+          <div class="image-label"><span>02</span> Degraded</div>
+          <img src="assets/sampling_degraded.jpg" alt="Degraded microscopy image">
+          <figcaption>PSNR 19.6 dB · SSIM 0.414</figcaption>
+        </figure>
+        <figure class="image-card restored-card">
+          <div class="image-label"><span>03</span> Restored</div>
+          <img src="assets/sampling_restored.jpg" alt="Restored microscopy image">
+          <figcaption>ΔPSNR +0.0 dB · ΔSSIM -0.000</figcaption>
+        </figure>
+      </div>
+      <div class="method-line">
+        <div><b>Degrade</b><span>Downsample then reconstruct at the original dimensions; the strong recipe removes spatial samples and exposes aliasing/blur.</span></div>
+        <div><b>Restore</b><span>BayesShrink db2 wavelet denoising suppresses artifacts, but removed samples are not invertible.</span></div>
+      </div>
+      <div class="micro-source">Illustrative evaluation record · nirschl · et · al · 2018 · recipe 763e5f2e</div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1 · Sampling / resolution loss</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">09 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Phase 1 · degradation family 02 / 10</div>
+      <div class="title-row">
+        <h1>Bit-depth quantization</h1>
+        <span class="pill danger">Strong severity</span>
+      </div>
+      <div class="triptych">
+        <figure class="image-card clean-card">
+          <div class="image-label"><span>01</span> Clean reference</div>
+          <img src="assets/quantization_clean.jpg" alt="Clean microscopy image">
+          <figcaption>Original · Fluorescence</figcaption>
+        </figure>
+        <figure class="image-card degraded-card">
+          <div class="image-label"><span>02</span> Degraded</div>
+          <img src="assets/quantization_degraded.jpg" alt="Degraded microscopy image">
+          <figcaption>PSNR 30.7 dB · SSIM 0.193</figcaption>
+        </figure>
+        <figure class="image-card restored-card">
+          <div class="image-label"><span>03</span> Restored</div>
+          <img src="assets/quantization_restored.jpg" alt="Restored microscopy image">
+          <figcaption>ΔPSNR +0.4 dB · ΔSSIM +0.008</figcaption>
+        </figure>
+      </div>
+      <div class="method-line">
+        <div><b>Degrade</b><span>Uniform intensity quantization collapses the continuous tonal range into a small set of discrete levels.</span></div>
+        <div><b>Restore</b><span>Wavelet denoising softens contouring, but it cannot recreate discarded intensity levels.</span></div>
+      </div>
+      <div class="micro-source">Illustrative evaluation record · nirschl · unpub · fluorescence · recipe 138721ed</div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1 · Bit-depth quantization</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">10 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Phase 1 · degradation family 03 / 10</div>
+      <div class="title-row">
+        <h1>Poisson–Gaussian noise</h1>
+        <span class="pill danger">Strong severity</span>
+      </div>
+      <div class="triptych">
+        <figure class="image-card clean-card">
+          <div class="image-label"><span>01</span> Clean reference</div>
+          <img src="assets/poisson_gaussian_clean.jpg" alt="Clean microscopy image">
+          <figcaption>Original · Fluorescence</figcaption>
+        </figure>
+        <figure class="image-card degraded-card">
+          <div class="image-label"><span>02</span> Degraded</div>
+          <img src="assets/poisson_gaussian_degraded.jpg" alt="Degraded microscopy image">
+          <figcaption>PSNR 23.3 dB · SSIM 0.282</figcaption>
+        </figure>
+        <figure class="image-card restored-card">
+          <div class="image-label"><span>03</span> Restored</div>
+          <img src="assets/poisson_gaussian_restored.jpg" alt="Restored microscopy image">
+          <figcaption>ΔPSNR +6.9 dB · ΔSSIM +0.343</figcaption>
+        </figure>
+      </div>
+      <div class="method-line">
+        <div><b>Degrade</b><span>Photon-count shot noise is combined with additive read noise to mimic noisy acquisition.</span></div>
+        <div><b>Restore</b><span>A local adaptive Wiener filter estimates neighborhood statistics and attenuates signal-dependent noise.</span></div>
+      </div>
+      <div class="micro-source">Illustrative evaluation record · nirschl · unpub · fluorescence · recipe 97e1af78</div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1 · Poisson–Gaussian noise</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">11 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Phase 1 · degradation family 04 / 10</div>
+      <div class="title-row">
+        <h1>Defocus blur</h1>
+        <span class="pill danger">Strong severity</span>
+      </div>
+      <div class="triptych">
+        <figure class="image-card clean-card">
+          <div class="image-label"><span>01</span> Clean reference</div>
+          <img src="assets/defocus_clean.jpg" alt="Clean microscopy image">
+          <figcaption>Original · Light</figcaption>
+        </figure>
+        <figure class="image-card degraded-card">
+          <div class="image-label"><span>02</span> Degraded</div>
+          <img src="assets/defocus_degraded.jpg" alt="Degraded microscopy image">
+          <figcaption>PSNR 26.7 dB · SSIM 0.700</figcaption>
+        </figure>
+        <figure class="image-card restored-card">
+          <div class="image-label"><span>03</span> Restored</div>
+          <img src="assets/defocus_restored.jpg" alt="Restored microscopy image">
+          <figcaption>ΔPSNR +0.6 dB · ΔSSIM +0.144</figcaption>
+        </figure>
+      </div>
+      <div class="method-line">
+        <div><b>Degrade</b><span>A normalized disk point-spread function removes high-frequency focus cues without assigning focus direction.</span></div>
+        <div><b>Restore</b><span>Recorded-PSF Wiener deconvolution restores detail while trading sharpness against ringing and noise amplification.</span></div>
+      </div>
+      <div class="micro-source">Illustrative evaluation record · kather · et · al · 2016 · recipe d8df307a</div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1 · Defocus blur</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">12 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Phase 1 · degradation family 05 / 10</div>
+      <div class="title-row">
+        <h1>Motion / scan drift</h1>
+        <span class="pill danger">Strong severity</span>
+      </div>
+      <div class="triptych">
+        <figure class="image-card clean-card">
+          <div class="image-label"><span>01</span> Clean reference</div>
+          <img src="assets/motion_clean.jpg" alt="Clean microscopy image">
+          <figcaption>Original · Electron</figcaption>
+        </figure>
+        <figure class="image-card degraded-card">
+          <div class="image-label"><span>02</span> Degraded</div>
+          <img src="assets/motion_degraded.jpg" alt="Degraded microscopy image">
+          <figcaption>PSNR 18.7 dB · SSIM 0.374</figcaption>
+        </figure>
+        <figure class="image-card restored-card">
+          <div class="image-label"><span>03</span> Restored</div>
+          <img src="assets/motion_restored.jpg" alt="Restored microscopy image">
+          <figcaption>ΔPSNR +1.8 dB · ΔSSIM +0.252</figcaption>
+        </figure>
+      </div>
+      <div class="method-line">
+        <div><b>Degrade</b><span>A normalized linear PSF smears structures along a controlled length and angle.</span></div>
+        <div><b>Restore</b><span>Recorded linear-PSF Wiener deconvolution partially reconstructs edge direction and local texture.</span></div>
+      </div>
+      <div class="micro-source">Illustrative evaluation record · wu · et · al · 2023 · recipe 88d2ff2e</div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1 · Motion / scan drift</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">13 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Phase 1 · degradation family 06 / 10</div>
+      <div class="title-row">
+        <h1>Periodic interference</h1>
+        <span class="pill danger">Strong severity</span>
+      </div>
+      <div class="triptych">
+        <figure class="image-card clean-card">
+          <div class="image-label"><span>01</span> Clean reference</div>
+          <img src="assets/periodic_clean.jpg" alt="Clean microscopy image">
+          <figcaption>Original · Light</figcaption>
+        </figure>
+        <figure class="image-card degraded-card">
+          <div class="image-label"><span>02</span> Degraded</div>
+          <img src="assets/periodic_degraded.jpg" alt="Degraded microscopy image">
+          <figcaption>PSNR 21.8 dB · SSIM 0.503</figcaption>
+        </figure>
+        <figure class="image-card restored-card">
+          <div class="image-label"><span>03</span> Restored</div>
+          <img src="assets/periodic_restored.jpg" alt="Restored microscopy image">
+          <figcaption>ΔPSNR +10.5 dB · ΔSSIM +0.431</figcaption>
+        </figure>
+      </div>
+      <div class="method-line">
+        <div><b>Degrade</b><span>An oriented sinusoid adds coherent striping at a known spatial frequency and amplitude.</span></div>
+        <div><b>Restore</b><span>A paired notch-reject filter removes the synthetic frequency peaks—an explicitly oracle-assisted baseline.</span></div>
+      </div>
+      <div class="micro-source">Illustrative evaluation record · wong · et · al · 2022 · recipe 0202f727</div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1 · Periodic interference</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">14 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Phase 1 · degradation family 07 / 10</div>
+      <div class="title-row">
+        <h1>JPEG compression</h1>
+        <span class="pill danger">Strong severity</span>
+      </div>
+      <div class="triptych">
+        <figure class="image-card clean-card">
+          <div class="image-label"><span>01</span> Clean reference</div>
+          <img src="assets/jpeg_clean.jpg" alt="Clean microscopy image">
+          <figcaption>Original · Light</figcaption>
+        </figure>
+        <figure class="image-card degraded-card">
+          <div class="image-label"><span>02</span> Degraded</div>
+          <img src="assets/jpeg_degraded.jpg" alt="Degraded microscopy image">
+          <figcaption>PSNR 23.2 dB · SSIM 0.639</figcaption>
+        </figure>
+        <figure class="image-card restored-card">
+          <div class="image-label"><span>03</span> Restored</div>
+          <img src="assets/jpeg_restored.jpg" alt="Restored microscopy image">
+          <figcaption>ΔPSNR +0.0 dB · ΔSSIM +0.000</figcaption>
+        </figure>
+      </div>
+      <div class="method-line">
+        <div><b>Degrade</b><span>Lossy block transform coding discards coefficients and introduces block/ringing artifacts; 16-bit inputs also incur an 8-bit round trip.</span></div>
+        <div><b>Restore</b><span>Wavelet denoising compares post-compression smoothing, but discarded coefficients remain unrecoverable.</span></div>
+      </div>
+      <div class="micro-source">Illustrative evaluation record · tang · et · al · 2019 · recipe c0c1988b</div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1 · JPEG compression</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">15 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Phase 1 · degradation family 08 / 10</div>
+      <div class="title-row">
+        <h1>Photobleaching</h1>
+        <span class="pill danger">Strong severity</span>
+      </div>
+      <div class="triptych">
+        <figure class="image-card clean-card">
+          <div class="image-label"><span>01</span> Clean reference</div>
+          <img src="assets/photobleaching_clean.jpg" alt="Clean microscopy image">
+          <figcaption>Original · Fluorescence</figcaption>
+        </figure>
+        <figure class="image-card degraded-card">
+          <div class="image-label"><span>02</span> Degraded</div>
+          <img src="assets/photobleaching_degraded.jpg" alt="Degraded microscopy image">
+          <figcaption>PSNR 21.4 dB · SSIM 0.930</figcaption>
+        </figure>
+        <figure class="image-card restored-card">
+          <div class="image-label"><span>03</span> Restored</div>
+          <img src="assets/photobleaching_restored.jpg" alt="Restored microscopy image">
+          <figcaption>ΔPSNR -2.5 dB · ΔSSIM +0.015</figcaption>
+        </figure>
+      </div>
+      <div class="method-line">
+        <div><b>Degrade</b><span>Fluorescence signal is attenuated above background to model retained intensity—not detector clipping.</span></div>
+        <div><b>Restore</b><span>Gamma correction plus CLAHE restores visibility and local contrast without recreating lost photons.</span></div>
+      </div>
+      <div class="micro-source">Illustrative evaluation record · burgess · et · al · 2024 · contour · recipe 8f1759a7</div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1 · Photobleaching</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">16 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Phase 1 · degradation family 09 / 10</div>
+      <div class="title-row">
+        <h1>Chromatic misregistration</h1>
+        <span class="pill danger">Strong severity</span>
+      </div>
+      <div class="triptych">
+        <figure class="image-card clean-card">
+          <div class="image-label"><span>01</span> Clean reference</div>
+          <img src="assets/chromatic_misregistration_clean.jpg" alt="Clean microscopy image">
+          <figcaption>Original · Fluorescence</figcaption>
+        </figure>
+        <figure class="image-card degraded-card">
+          <div class="image-label"><span>02</span> Degraded</div>
+          <img src="assets/chromatic_misregistration_degraded.jpg" alt="Degraded microscopy image">
+          <figcaption>PSNR 23.9 dB · SSIM 0.963</figcaption>
+        </figure>
+        <figure class="image-card restored-card">
+          <div class="image-label"><span>03</span> Restored</div>
+          <img src="assets/chromatic_misregistration_restored.jpg" alt="Restored microscopy image">
+          <figcaption>ΔPSNR +0.3 dB · ΔSSIM +0.005</figcaption>
+        </figure>
+      </div>
+      <div class="method-line">
+        <div><b>Degrade</b><span>Opposing subpixel channel shifts create color fringes in genuinely multichannel fluorescence images.</span></div>
+        <div><b>Restore</b><span>Phase-correlation channel registration estimates displacement relative to green and realigns red/blue channels.</span></div>
+      </div>
+      <div class="micro-source">Illustrative evaluation record · burgess · et · al · 2024 · contour · recipe 23138828</div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1 · Chromatic misregistration</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">17 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Phase 1 · degradation family 10 / 10</div>
+      <div class="title-row">
+        <h1>Detector saturation</h1>
+        <span class="pill danger">Strong severity</span>
+      </div>
+      <div class="triptych">
+        <figure class="image-card clean-card">
+          <div class="image-label"><span>01</span> Clean reference</div>
+          <img src="assets/saturation_clean.jpg" alt="Clean microscopy image">
+          <figcaption>Original · Fluorescence</figcaption>
+        </figure>
+        <figure class="image-card degraded-card">
+          <div class="image-label"><span>02</span> Degraded</div>
+          <img src="assets/saturation_degraded.jpg" alt="Degraded microscopy image">
+          <figcaption>PSNR 20.3 dB · SSIM 0.957</figcaption>
+        </figure>
+        <figure class="image-card restored-card">
+          <div class="image-label"><span>03</span> Restored</div>
+          <img src="assets/saturation_restored.jpg" alt="Restored microscopy image">
+          <figcaption>ΔPSNR +0.1 dB · ΔSSIM +0.001</figcaption>
+        </figure>
+      </div>
+      <div class="method-line">
+        <div><b>Degrade</b><span>Gain and black-level changes are followed by detector-range clipping, flattening bright structures.</span></div>
+        <div><b>Restore</b><span>Gamma/CLAHE enhancement redistributes visible contrast; clipped values cannot be reconstructed.</span></div>
+      </div>
+      <div class="micro-source">Illustrative evaluation record · burgess · et · al · 2024 · texture · recipe 6120d3a5</div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1 · Detector saturation</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">18 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Fingerprint distributions</div>
+      <h1>Feature space spans radically different microscopy regimes</h1>
+      <div class="figure-grid">
+        <div class="figure-frame"><img src="assets/p1_image1.png" alt="Entropy distribution"></div>
+        <div class="figure-frame"><img src="assets/p1_image2.png" alt="Intensity standard deviation distribution"></div>
+      </div>
+      <div class="analysis-lines">
+        <div class="analysis-line"><b>Entropy is broad and multimodal:</b> low-information fields coexist with richly textured specimens, so one global threshold would be brittle.</div>
+        <div class="analysis-line"><b>Intensity variation is right-skewed:</b> most images have modest contrast, while a small high-contrast tail motivates normalization and modality-aware interpretation.</div>
+      </div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1 · Exploratory Analysis</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">19 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Paired fidelity distributions</div>
+      <h1>One scalar cannot summarize degradation impact</h1>
+      <div class="figure-grid">
+        <div class="figure-frame"><img src="assets/p1_image3.png" alt="PSNR density"></div>
+        <div class="figure-frame"><img src="assets/p1_image4.png" alt="SSIM density"></div>
+      </div>
+      <div class="analysis-lines">
+        <div class="analysis-line"><b>PSNR concentrates near 25–40 dB</b> but retains long tails, reflecting both subtle controls and destructive strong corruptions.</div>
+        <div class="analysis-line"><b>SSIM piles up near 1.0</b> while still spanning the full range; structural similarity and pixel error capture complementary failure modes.</div>
+      </div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1 · Exploratory Analysis</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">20 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">What the completed outputs establish</div>
+      <h1>Scale is useful only when the audit trail survives</h1>
+      <div class="stat-strip">
+        <div class="stat"><b>1,701</b><span>clean source images</span></div>
+        <div class="stat"><b>15,480</b><span>materialized recipes</span></div>
+        <div class="stat"><b>99.95%</b><span>PSNR monotonic triplets</span></div>
+        <div class="stat"><b>0 / 0</b><span>validation errors / warnings</span></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Role-balanced records</h3>
+          <div class="bar-row"><span class="bar-label">Training</span><span class="bar-track"><span class="bar-fill" style="display:block;width:47.3%"></span></span><span class="bar-value">7,327</span></div>
+          <div class="bar-row"><span class="bar-label">Evaluation</span><span class="bar-track"><span class="bar-fill coral-fill" style="display:block;width:44.1%"></span></span><span class="bar-value">6,822</span></div>
+          <div class="bar-row"><span class="bar-label">Development</span><span class="bar-track"><span class="bar-fill gold-fill" style="display:block;width:8.6%"></span></span><span class="bar-value">1,331</span></div>
+        </div>
+        <div class="card dark-card">
+          <h3>Release anatomy</h3>
+          <ul class="clean-list small" style="color:#d5e1e3">
+            <li>recipe / generated / restored JSONL manifests</li>
+            <li>paired CSV + JSONL analysis records</li>
+            <li>dataset card, audit, validation, calibration figures</li>
+            <li>structured logs + serialized classical baselines</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1 · Release Evidence</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">21 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Restoration is family-dependent</div>
+      <h1>Invertibility—not visual polish—governs recovery</h1>
+      <div class="grid-2" style="grid-template-columns:1.18fr .82fr">
+        <div class="card">
+          <h3>Mean evaluation Δ after restoration · single degradations</h3>
+          <table class="mini-table">
+            <thead><tr><th>Family</th><th>ΔPSNR</th><th>ΔSSIM</th><th>Interpretation</th></tr></thead>
+            <tbody>
+              <tr><td>Periodic</td><td class="good">+7.79 dB</td><td class="good">+0.109</td><td>known-frequency notch excels</td></tr>
+              <tr><td>Poisson–Gaussian</td><td class="good">+5.21 dB</td><td class="good">+0.165</td><td>local statistics are recoverable</td></tr>
+              <tr><td>Motion</td><td class="good">+1.43 dB</td><td class="good">+0.044</td><td>partial PSF inversion</td></tr>
+              <tr><td>Quantization</td><td class="bad">−2.59 dB</td><td class="bad">−0.038</td><td>levels were discarded</td></tr>
+              <tr><td>Photobleaching</td><td class="bad">−12.11 dB</td><td class="bad">−0.274</td><td>enhancement ≠ photon recovery</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <div class="card coral-top"><div class="kicker">Cross-source fingerprint baseline</div><div class="number coral-num" style="margin-top:10px">34.9%</div><p class="small muted">degradation-family accuracy · macro-F1 27.3%</p><div class="divider"></div><div class="number" style="font-size:30px">41.0%</div><p class="small muted" style="margin-bottom:0">severity accuracy · macro-F1 38.2%</p></div>
+          <div class="takeaway" style="margin-top:12px;font-size:13px"><b>Reading:</b> classical features carry transferable signal, but modality/domain variation prevents a simple linear fingerprint from becoming a universal detector.</div>
+        </div>
+      </div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1 · Aggregate Findings</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">22 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Weak → medium → strong</div>
+      <h1>Severity is empirically ordered across all ten families</h1>
+      <div class="single-figure-layout">
+        <div class="figure-frame"><img src="assets/severity_psnr.png" alt="Severity PSNR calibration"></div>
+        <div class="insight-panel">
+          <div class="insight"><b>99.95%</b><span>3,743 of 3,745 eligible paired triplets satisfy PSNR(weak) ≥ PSNR(medium) ≥ PSNR(strong).</span></div>
+          <div class="insight"><b>Not equally spaced</b><span>Family-specific slopes show why severity must be calibrated per corruption rather than treated as one universal physical scale.</span></div>
+        </div>
+      </div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1 · Severity Calibration</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">23 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Paired inference-time robustness</div>
+      <h1>One question; three pixel conditions; one causal comparison</h1>
+      <div class="branch-flow" style="grid-template-columns:250px 45px 1fr; margin-top:28px">
+        <div class="branch-source"><b>Unique sample</b><span>image + official MCQ + one recipe</span></div><div class="arrow">→</div>
+        <div class="branches">
+          <div class="branch"><b>Clean</b><span>official Micro-Bench image</span></div>
+          <div class="branch" style="border-color:#e9b3a8"><b style="color:var(--coral)">Degraded</b><span>exact Phase 1 recipe</span></div>
+          <div class="branch" style="border-color:#92c8ba"><b>Restored</b><span>matched restored image</span></div>
+        </div>
+      </div>
+      <div class="grid-2" style="margin-top:27px">
+        <div class="card teal-top"><h3>Held constant</h3><p class="small muted">Question, answer options, expected answer, prompt template, model, decoding parameters, and sample-specific seed.</p></div>
+        <div class="card coral-top"><h3>Changed deliberately</h3><p class="small muted">Only the image condition. Prompts never identify clean/degraded/restored; request order is deterministically shuffled.</p></div>
+      </div>
+      <div class="takeaway" style="margin-top:18px"><b>Unit of analysis:</b> the independent image–question triplet; no pseudoreplication from multiple questions per source image.</div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1.5 · Experimental Design</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">24 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Deterministic, resumable evaluation</div>
+      <h1>Balanced cohort → blinded requests → conservative scoring</h1>
+      <div class="timeline">
+        <div class="time-step"><b>01 · Join</b><span>recipes, generated, restored, and official annotations by recipe ID</span></div>
+        <div class="time-step"><b>02 · Balance</b><span>task, family, severity, modality; one question + recipe per image</span></div>
+        <div class="time-step"><b>03 · Shuffle</b><span>all three conditions interleaved to reduce order/load effects</span></div>
+        <div class="time-step"><b>04 · Infer</b><span>Qwen3-VL-8B via vLLM; deterministic JSON answer request</span></div>
+        <div class="time-step"><b>05 · Parse</b><span>JSON/letter/index/exact option only; ambiguity is never guessed</span></div>
+      </div>
+      <div class="stat-strip" style="margin-top:34px">
+        <div class="stat"><b>500</b><span>unique paired samples</span></div>
+        <div class="stat"><b>1,500</b><span>completed requests</span></div>
+        <div class="stat"><b>6</b><span>perception task types</span></div>
+        <div class="stat"><b>100%</b><span>parse rate</span></div>
+      </div>
+      <div class="source-line">Cohort: 167 coarse + 333 fine perception; 100 electron + 100 fluorescence + 300 light microscopy samples.</div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1.5 · Implementation</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">25 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Uncertainty and paired effects</div>
+      <h1>Report effects, confidence intervals, and transitions—not isolated accuracy</h1>
+      <div class="grid-2" style="grid-template-columns:.9fr 1.1fr">
+        <div class="card dark-card">
+          <div class="kicker" style="color:var(--mint)">Primary endpoint</div>
+          <h2 style="margin:14px 0">Task-macro accuracy</h2>
+          <p style="font-family:serif;font-size:21px;color:#dbe7e8">MacroAcc(c) = mean<sub>task</sub> mean<sub>sample</sub> 𝟙[ŷ<sub>i,c</sub> = y<sub>i</sub>]</p>
+          <p class="small" style="color:#b9cccf;margin-bottom:0">Each task type receives equal weight, preventing frequent tasks from dominating.</p>
+        </div>
+        <div class="grid-2" style="gap:13px">
+          <div class="card teal-top"><h3>10,000× bootstrap</h3><p class="small muted">Resample complete triplets; report paired 95% percentile intervals.</p></div>
+          <div class="card coral-top"><h3>Exact McNemar</h3><p class="small muted">Test discordant pairs; Holm-adjust the three condition comparisons.</p></div>
+          <div class="card gold-top"><h3>Four effects</h3><p class="small muted">Degradation loss, restoration gain, residual vs clean, recovery fraction.</p></div>
+          <div class="card teal-top"><h3>Transition audit</h3><p class="small muted">Stable, restored, unrecovered, harmed, helped, transient, only-restored, always-wrong.</p></div>
+        </div>
+      </div>
+      <div class="callout" style="margin-top:17px;font-size:13px"><b>Scope boundary:</b> completed Phase 1 annotations support coarse and fine perception only; no cognition category is inferred or fabricated.</div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1.5 · Statistical Analysis</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">26 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Overall robustness</div>
+      <h1>Restoration recovers most—but not all—of the aggregate loss</h1>
+      <div class="single-figure-layout">
+        <div class="figure-frame"><img src="assets/robust_1.png" alt="Overall robustness figure"></div>
+        <div class="insight-panel">
+          <div class="insight"><b>66.8 → 65.2 → 66.4%</b><span>Overall macro accuracy: −1.62 pp degradation effect, then +1.21 pp restoration gain.</span></div>
+          <div class="insight"><b>Fine perception</b><span>drops 3.02 pp and recovers 1.51 pp; coarse perception does not show the same loss. All 95% CIs overlap.</span></div>
+        </div>
+      </div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1.5 · Result 1</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">27 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Degradation-specific response</div>
+      <h1>Aggregate averages hide the family that matters</h1>
+      <div class="single-figure-layout" style="grid-template-columns:1.92fr .58fr">
+        <div class="figure-frame"><img src="assets/robust_2.png" alt="Degradation profile heatmaps"></div>
+        <div class="insight-panel">
+          <div class="insight"><b>Periodic: −12.9 / +11.5 pp</b><span>The largest robustness loss is nearly recovered by the known-frequency notch filter.</span></div>
+          <div class="insight"><b>Heterogeneous utility</b><span>Photobleaching gains +7.1 pp, while motion restoration loses another 1.7 pp; subgroup n ranges 19–57.</span></div>
+        </div>
+      </div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1.5 · Result 2</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">28 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Severity response</div>
+      <h1>Strong corruption is where semantic robustness separates</h1>
+      <div class="single-figure-layout">
+        <div class="figure-frame"><img src="assets/robust_3.png" alt="Severity response figure"></div>
+        <div class="insight-panel">
+          <div class="insight"><b>Strong: −6.0 pp</b><span>Clean 66.6% versus degraded 60.6%; restoration returns +2.0 pp, leaving −4.0 pp residual.</span></div>
+          <div class="insight"><b>Weak ≈ unchanged</b><span>Weak and medium strata show no consistent loss. Curves use different balanced subsets, so all three baselines are shown.</span></div>
+        </div>
+      </div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1.5 · Result 3</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">29 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">Paired correctness transitions</div>
+      <h1>Recovery must be traced sample by sample</h1>
+      <div class="single-figure-layout" style="grid-template-columns:1.95fr .55fr">
+        <div class="figure-frame"><img src="assets/robust_4.png" alt="Paired transition and recovery map"></div>
+        <div class="insight-panel">
+          <div class="insight"><b>59.6% stable correct</b><span>298 / 500 remain correct throughout; 136 / 500 (27.2%) are always incorrect.</span></div>
+          <div class="insight"><b>13 restored · 16 missed · 7 harmed</b><span>Restoration reverses some degradation failures, but periodic—not motion—lies close to full recovery.</span></div>
+        </div>
+      </div>
+    </div>
+      
+      <div class="footer">
+        <span>Phase 1.5 · Result 4</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">30 / 32</span>
+      </div>
+    </section><section class="slide ">
+      <div class="slide-inner">
+      <div class="eyebrow">What the evidence supports</div>
+      <h1>Three conclusions—and one disciplined boundary</h1>
+      <div class="conclusion-grid">
+        <div class="conclusion-card"><div class="number">01</div><h3>A reproducible DIP benchmark</h3><p>1,701 clean sources become 15,480 controlled recipes with strict train/evaluation separation, full provenance, and 99.95% severity monotonicity.</p></div>
+        <div class="conclusion-card"><div class="number coral-num">02</div><h3>Restoration follows invertibility</h3><p>Notch filtering and denoising can recover structured/noisy corruption; clipping, quantization, sampling, bleaching, and compression remain information-limited.</p></div>
+        <div class="conclusion-card"><div class="number gold">03</div><h3>Fine perception is the stress point</h3><p>Overall loss is modest and uncertain, but strong corruptions and particular families expose meaningful paired failures that aggregate accuracy obscures.</p></div>
+      </div>
+      <div class="callout" style="margin-top:18px;font-size:13px"><b>Boundary:</b> these are controlled synthetic degradations and exploratory n=500 VLM results; pixel improvement does not automatically imply biological or semantic improvement.</div>
+    </div>
+      
+      <div class="footer">
+        <span>Conclusion</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">31 / 32</span>
+      </div>
+    </section><section class="slide outro">
+      <div class="slide-inner">
+      <div class="outro-center">
+        <div class="eyebrow">Sharif University of Technology · Computer Engineering</div>
+        <h1>Thank you.</h1>
+        <div class="question">Which image failures should a microscopy model be trained to notice—and when should it admit that information is gone?</div>
+        <div class="outro-authors"><b>Shayan Salehi</b> · 404203509 &nbsp;&nbsp; | &nbsp;&nbsp; <b>Ali Hezaveh</b> · 404208531<br>Digital Image Processing Course · Prof. Kasaei</div>
+      </div>
+    </div>
+      
+      <div class="footer">
+        <span>Thank You</span>
+        <span class="footer-rule"></span>
+        <span class="page-number">32 / 32</span>
+      </div>
+    </section>
+</body>
+</html>
