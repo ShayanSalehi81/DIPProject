@@ -173,6 +173,107 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+## Core LaTeX temporary files
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+*.lb
+
+## Bibliography
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+
+## Build tool directories
+*.fdb_latexmk
+*.synctex
+*.synctex(busy)
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
+
+## Beamer (presentations)
+*.nav
+*.pre
+*.snm
+*.vrb
+
+## Package-specific
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.ist
+*.xdy
+*.brf
+*.idx
+*.ilg
+*.ind
+*.ptc
+*.thm
+*.tdo
+
+## makeidx, xindy
+*.idx
+*.ind
+*.ilg
+
+## algorithms
+*.alg
+*.loa
+
+## achemso
+*.sagetex.sage
+*.sagetex.py
+*.sagetex.scmd
+
+## amsthm
+*.thm
+
+## hyperref
+*.brf
+
+## listings
+*.lol
+
+## minted (requires pygments/shell-escape)
+*.pyg
+_minted*
+
+## todonotes
+*.tdo
+
+## xindy
+*.xdy
+
+## LaTeXmk
+*.fdb_latexmk
+*.fls
+
+## Editor / OS files
+*.bak
+*~
+.DS_Store
+Thumbs.db
+
+## Optional — uncomment if you don't want to track the compiled PDF
+# *.pdf
+
+
 # Phase 1 datasets and generated research artifacts
 data/cache/
 data/external/
