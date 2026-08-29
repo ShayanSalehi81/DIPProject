@@ -1,0 +1,4 @@
+comparison,left_correct_right_wrong,left_wrong_right_correct,discordant_pairs,p_value,p_value_holm
+clean_vs_degraded,29,21,50,0.32223632,0.96670896
+degraded_vs_restored,16,22,38,0.41769219,0.96670896
+clean_vs_restored,23,21,44,0.88039582,0.96670896

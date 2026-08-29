@@ -1,0 +1,7 @@
+condition,task_group,n,parse_rate,unparseable_rate,retry_rate
+clean,coarse_perception,167,1.00000000,0.00000000,0.00000000
+clean,fine_perception,333,1.00000000,0.00000000,0.00000000
+degraded,coarse_perception,167,1.00000000,0.00000000,0.00000000
+degraded,fine_perception,333,1.00000000,0.00000000,0.00000000
+restored,coarse_perception,167,1.00000000,0.00000000,0.00000000
+restored,fine_perception,333,1.00000000,0.00000000,0.00000000

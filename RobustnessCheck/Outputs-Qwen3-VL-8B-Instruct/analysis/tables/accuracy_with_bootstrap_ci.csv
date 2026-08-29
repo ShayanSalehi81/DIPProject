@@ -1,0 +1,10 @@
+scope,scope_label,condition,condition_label,n,task_types,accuracy,ci_low,ci_high
+all,Overall,clean,Clean,500,6,0.66781411,0.62908282,0.70573561
+all,Overall,degraded,Degraded,500,6,0.65160643,0.61104372,0.69083473
+all,Overall,restored,Restored,500,6,0.66372633,0.62452700,0.70271339
+coarse_perception,Coarse perception,clean,Clean,167,2,0.77172978,0.70957335,0.83104396
+coarse_perception,Coarse perception,degraded,Degraded,167,2,0.78356282,0.72327509,0.84094172
+coarse_perception,Coarse perception,restored,Restored,167,2,0.78980207,0.72763098,0.84760141
+fine_perception,Fine perception,clean,Clean,333,4,0.61585628,0.56892560,0.66362731
+fine_perception,Fine perception,degraded,Degraded,333,4,0.58562823,0.53502429,0.63502595
+fine_perception,Fine perception,restored,Restored,333,4,0.60068847,0.55046131,0.65041232

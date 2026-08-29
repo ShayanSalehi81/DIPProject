@@ -1,0 +1,13 @@
+scope,scope_label,effect,left_condition,right_condition,n,estimate,ci_low,ci_high
+all,Overall,degradation_effect,clean,degraded,500,-0.01620769,-0.04366174,0.01128851
+all,Overall,restoration_gain,degraded,restored,500,0.01211991,-0.01170256,0.03624081
+all,Overall,residual_vs_clean,clean,restored,500,-0.00408778,-0.03037256,0.02151090
+all,Overall,recovery_fraction,degraded,restored,500,0.74778761,-4.21194562,6.31104418
+coarse_perception,Coarse perception,degradation_effect,clean,degraded,167,0.01183305,-0.02431153,0.04890744
+coarse_perception,Coarse perception,restoration_gain,degraded,restored,167,0.00623924,-0.03087078,0.04494400
+coarse_perception,Coarse perception,residual_vs_clean,clean,restored,167,0.01807229,-0.01666810,0.05424186
+coarse_perception,Coarse perception,recovery_fraction,degraded,restored,167,-0.52727273,-14.94883041,13.09523810
+fine_perception,Fine perception,degradation_effect,clean,degraded,333,-0.03022806,-0.06717945,0.00574238
+fine_perception,Fine perception,restoration_gain,degraded,restored,333,0.01506024,-0.01558015,0.04594460
+fine_perception,Fine perception,residual_vs_clean,clean,restored,333,-0.01516781,-0.04985734,0.01978642
+fine_perception,Fine perception,recovery_fraction,degraded,restored,333,0.49822064,-2.11462896,3.14544562

@@ -1,0 +1,25 @@
+scope,scope_label,pattern,transition,count,fraction
+all,Overall,111,Stable correct,298,0.59600000
+all,Overall,101,Restored after failure,13,0.02600000
+all,Overall,100,Unrecovered failure,16,0.03200000
+all,Overall,110,Harmed by restoration,7,0.01400000
+all,Overall,011,"Degradation helped, retained",12,0.02400000
+all,Overall,010,Transient degradation gain,9,0.01800000
+all,Overall,001,Only restored correct,9,0.01800000
+all,Overall,000,Always incorrect,136,0.27200000
+coarse_perception,Coarse perception,111,Stable correct,123,0.73652695
+coarse_perception,Coarse perception,101,Restored after failure,3,0.01796407
+coarse_perception,Coarse perception,100,Unrecovered failure,1,0.00598802
+coarse_perception,Coarse perception,110,Harmed by restoration,2,0.01197605
+coarse_perception,Coarse perception,011,"Degradation helped, retained",3,0.01796407
+coarse_perception,Coarse perception,010,Transient degradation gain,3,0.01796407
+coarse_perception,Coarse perception,001,Only restored correct,3,0.01796407
+coarse_perception,Coarse perception,000,Always incorrect,29,0.17365269
+fine_perception,Fine perception,111,Stable correct,175,0.52552553
+fine_perception,Fine perception,101,Restored after failure,10,0.03003003
+fine_perception,Fine perception,100,Unrecovered failure,15,0.04504505
+fine_perception,Fine perception,110,Harmed by restoration,5,0.01501502
+fine_perception,Fine perception,011,"Degradation helped, retained",9,0.02702703
+fine_perception,Fine perception,010,Transient degradation gain,6,0.01801802
+fine_perception,Fine perception,001,Only restored correct,6,0.01801802
+fine_perception,Fine perception,000,Always incorrect,107,0.32132132

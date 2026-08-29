@@ -1,0 +1,52 @@
+{
+  "completed_at_utc": "2026-08-05T14:10:40.095287+00:00",
+  "expected_requests": 300,
+  "new_requests": 300,
+  "new_status_counts": {
+    "parsed": 300
+  },
+  "preexisting_requests": 0,
+  "run_id": "2d3532b6dc494fe1be94309e1611ac9a",
+  "sample_count": 100,
+  "sample_manifest_sha256": "9b4ddabcd7d89127d97380befa7eba87afc5782fc11267bb04b45e4f4a27ffe2",
+  "schema_version": "1.0",
+  "settings": {
+    "allow_synthetic_benchmark_rows": false,
+    "analysis_output_dir": "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis",
+    "api_base": "http://localhost:8007/v1",
+    "bootstrap_resamples": 10000,
+    "concurrency": 4,
+    "confidence_level": 0.95,
+    "data_pipeline_root": "/home/dev/shayan_workspace/DIPProject/DataDegradationPipeline",
+    "figure_dpi": 300,
+    "generated_manifest": "/home/dev/shayan_workspace/DIPProject/DataDegradationPipeline/outputs/manifests/generated.jsonl",
+    "include_mixed_degradations": false,
+    "max_retries": 3,
+    "max_tokens": 32,
+    "model_id": "Qwen/Qwen3-VL-8B-Instruct",
+    "project_root": "/home/dev/shayan_workspace/DIPProject/RobustnessCheck",
+    "question_types": [
+      "domain",
+      "modality",
+      "classification",
+      "subdomain",
+      "submodality",
+      "stain"
+    ],
+    "random_seed": 20260805,
+    "request_timeout_seconds": 180.0,
+    "restored_manifest": "/home/dev/shayan_workspace/DIPProject/DataDegradationPipeline/outputs/manifests/restored.jsonl",
+    "results_path": "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/evaluation_results.jsonl",
+    "sample_count": 100,
+    "sample_manifest": "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/samples.jsonl",
+    "severities": [
+      "weak",
+      "medium",
+      "strong"
+    ],
+    "strict_completeness": true,
+    "temperature": 0.0,
+    "verify_images": true
+  },
+  "started_at_utc": "2026-08-05T14:10:06.641331+00:00"
+}

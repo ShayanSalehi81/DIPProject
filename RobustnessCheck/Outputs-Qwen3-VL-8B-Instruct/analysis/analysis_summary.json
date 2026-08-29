@@ -1,0 +1,152 @@
+{
+  "analyzed_complete_samples": 500,
+  "analyzed_requests": 1500,
+  "benchmark_scope_note": "The completed Phase 1 artifacts contain Micro-Bench perception annotations only. Results are reported for coarse and fine perception; no cognition category is inferred or fabricated.",
+  "bootstrap_resamples": 10000,
+  "confidence_level": 0.95,
+  "configured_sample_count": 500,
+  "excluded_incomplete_sample_ids": [],
+  "figure_files": [
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/figures/figure_1_overall_robustness.png",
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/figures/figure_1_overall_robustness.pdf",
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/figures/figure_1_overall_robustness.svg",
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/figures/figure_2_degradation_profile.png",
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/figures/figure_2_degradation_profile.pdf",
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/figures/figure_2_degradation_profile.svg",
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/figures/figure_3_severity_response.png",
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/figures/figure_3_severity_response.pdf",
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/figures/figure_3_severity_response.svg",
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/figures/figure_4_paired_transitions.png",
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/figures/figure_4_paired_transitions.pdf",
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/figures/figure_4_paired_transitions.svg"
+  ],
+  "macro_accuracy": {
+    "clean": {
+      "ci_high": 0.705735611528726,
+      "ci_low": 0.6290828179759599,
+      "estimate": 0.6678141135972461
+    },
+    "degraded": {
+      "ci_high": 0.6908347272713896,
+      "ci_low": 0.6110437212918406,
+      "estimate": 0.6516064257028112
+    },
+    "restored": {
+      "ci_high": 0.7027133917595538,
+      "ci_low": 0.624526996845513,
+      "estimate": 0.6637263339070568
+    }
+  },
+  "model_id": "Qwen/Qwen3-VL-8B-Instruct",
+  "output_directory": "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis",
+  "paired_effects": {
+    "degradation_effect": {
+      "ci_high": 0.011288509688336605,
+      "ci_low": -0.043661735589431164,
+      "estimate": -0.01620768789443483
+    },
+    "recovery_fraction": {
+      "ci_high": 6.311044183697576,
+      "ci_low": -4.211945622552905,
+      "estimate": 0.7477876106194729
+    },
+    "residual_vs_clean": {
+      "ci_high": 0.021510897844810774,
+      "ci_low": -0.030372562605987162,
+      "estimate": -0.004087779690189253
+    },
+    "restoration_gain": {
+      "ci_high": 0.03624081322159965,
+      "ci_low": -0.01170255534283055,
+      "estimate": 0.012119908204245577
+    }
+  },
+  "paired_tests": [
+    {
+      "comparison": "clean_vs_degraded",
+      "discordant_pairs": 50,
+      "left_correct_right_wrong": 29,
+      "left_wrong_right_correct": 21,
+      "p_value": 0.3222363203575469,
+      "p_value_holm": 0.9667089610726407
+    },
+    {
+      "comparison": "degraded_vs_restored",
+      "discordant_pairs": 38,
+      "left_correct_right_wrong": 16,
+      "left_wrong_right_correct": 22,
+      "p_value": 0.417692190836533,
+      "p_value_holm": 0.9667089610726407
+    },
+    {
+      "comparison": "clean_vs_restored",
+      "discordant_pairs": 44,
+      "left_correct_right_wrong": 23,
+      "left_wrong_right_correct": 21,
+      "p_value": 0.880395821280672,
+      "p_value_holm": 0.9667089610726407
+    }
+  ],
+  "response_quality": [
+    {
+      "condition": "clean",
+      "n": 167,
+      "parse_rate": 1.0,
+      "retry_rate": 0.0,
+      "task_group": "coarse_perception",
+      "unparseable_rate": 0.0
+    },
+    {
+      "condition": "clean",
+      "n": 333,
+      "parse_rate": 1.0,
+      "retry_rate": 0.0,
+      "task_group": "fine_perception",
+      "unparseable_rate": 0.0
+    },
+    {
+      "condition": "degraded",
+      "n": 167,
+      "parse_rate": 1.0,
+      "retry_rate": 0.0,
+      "task_group": "coarse_perception",
+      "unparseable_rate": 0.0
+    },
+    {
+      "condition": "degraded",
+      "n": 333,
+      "parse_rate": 1.0,
+      "retry_rate": 0.0,
+      "task_group": "fine_perception",
+      "unparseable_rate": 0.0
+    },
+    {
+      "condition": "restored",
+      "n": 167,
+      "parse_rate": 1.0,
+      "retry_rate": 0.0,
+      "task_group": "coarse_perception",
+      "unparseable_rate": 0.0
+    },
+    {
+      "condition": "restored",
+      "n": 333,
+      "parse_rate": 1.0,
+      "retry_rate": 0.0,
+      "task_group": "fine_perception",
+      "unparseable_rate": 0.0
+    }
+  ],
+  "schema_version": "1.0",
+  "study": "paired clean/degraded/restored Micro-Bench robustness",
+  "table_files": [
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/tables/accuracy_with_bootstrap_ci.csv",
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/tables/paired_effects_with_bootstrap_ci.csv",
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/tables/factor_breakdown.csv",
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/tables/paired_mcnemar_tests.csv",
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/tables/correctness_transitions.csv",
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/tables/response_quality.csv",
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/tables/latency_summary.csv",
+    "/home/dev/shayan_workspace/DIPProject/RobustnessCheck/outputs/analysis/tables/macro_accuracy_table.tex"
+  ]
+}
